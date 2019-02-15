@@ -19,18 +19,17 @@ class CreateUser(Resource):
     def post(self):
         try:
             parser = reqparse.RequestParser()
-            parser.add_argument('email', type=str)
-            parser.add_argument('user_name', type=str)
+            parser.add_argument('login_id', type=str)
             parser.add_argument('password', type=str)
             args = parser.parse_args()
 
-            __userEmail = args['email']
-            __userName = args['user_name']
-            __userPassword = args['password']
+            __loginId = args['login_id']
+            __password = args['password']
 
             conn = mysql.connect()
             cursor = conn.cursor()
-            # cursor.execute("insert into test (a, b) values (1, 'b')")
+
+            cursor.execute("insert into user (login_id, password, created_datetime) values (%s, %s, now())", (__loginId, __password))
 
             conn.commit()
             cursor.close()

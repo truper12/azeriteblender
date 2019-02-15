@@ -5,3 +5,4 @@ python pakages:
     flask
     flask-restful
     flask-mysql
+    flask-bcrypt
