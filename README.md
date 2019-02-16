@@ -4,8 +4,9 @@ database : MySQL 5.6.26
 python pakages:
     flask
     flask-restplus
-    flask-sqlalchemy
+    flask-mysql
     flask-bcrypt
     flask-script
-# flask-mysql
+    pyjwt
+# flask-sqlalchemy
 # flask-restful
