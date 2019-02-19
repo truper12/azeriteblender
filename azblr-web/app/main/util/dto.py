@@ -13,3 +13,6 @@ class AuthDto:
         'login_id': fields.String(required=True, description='The user login id'),
         'password': fields.String(required=True, description='The user password '),
     })
+
+class ItemDto:
+    api = Namespace('item', description='item related operations')
