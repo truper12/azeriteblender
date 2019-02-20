@@ -8,5 +8,8 @@ python pakages:
     flask-bcrypt
     flask-script
     pyjwt
+    requests
 # flask-sqlalchemy
 # flask-restful
+
+run: python3 manage.py run

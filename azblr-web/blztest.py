@@ -7,6 +7,7 @@ def a():
     print(r.json())
     r2 = requests.get('https://kr.api.blizzard.com/wow/spell/280555', data={'region':'kr','locale':'ko_KR'},headers={'Authorization': 'Bearer %s' % (d['access_token'],)})
     # r2 = requests.get('https://kr.api.blizzard.com/wow/item/160630?namespace=static-kr', data={'region':'kr','locale':'ko_KR'},headers={'Authorization': 'Bearer %s' % (d['access_token'],)})
+    # r2 = requests.get('https://kr.api.blizzard.com/wow/item/159393?namespace=static-kr', data={'region':'kr','locale':'ko_KR'},headers={'Authorization': 'Bearer %s' % (d['access_token'],)})
     # r2 = requests.get('https://kr.api.blizzard.com/data/wow/token/?namespace=dynamic-kr', headers={'Authorization': 'Bearer %s' % (d['access_token'],)})
     print(r2.json())
     return

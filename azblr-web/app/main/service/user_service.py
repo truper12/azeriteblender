@@ -37,43 +37,43 @@ def save_new_user(data):
         conn.close()
         return response_object, 409
 
-def get_all_users():
-    ret = []
-    conn = db.connect()
-    cursor = conn.cursor()
+# def get_all_users():
+#     ret = []
+#     conn = db.connect()
+#     cursor = conn.cursor()
 
-    cursor.execute("select id, login_id, password, last_login, created_datetime from user")
-    rows = cursor.fetchall()
-    for row in rows:
-        r = {}
-        r['id'] = row[0]
-        r['login_id'] = row[1]
-        r['password'] = row[2]
-        r['last_login'] = row[3]
-        r['created_datetime'] = row[4]
-        ret.append(r)
+#     cursor.execute("select id, login_id, password, last_login, created_datetime from user")
+#     rows = cursor.fetchall()
+#     for row in rows:
+#         r = {}
+#         r['id'] = row[0]
+#         r['login_id'] = row[1]
+#         r['password'] = row[2]
+#         r['last_login'] = row[3]
+#         r['created_datetime'] = row[4]
+#         ret.append(r)
 
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return ret
+#     conn.commit()
+#     cursor.close()
+#     conn.close()
+#     return ret
 
 
-def get_a_user(login_id):
-    ret = {}
+# def get_a_user(login_id):
+#     ret = {}
 
-    conn = db.connect()
-    cursor = conn.cursor()
-    cursor.execute("select id, login_id, password, last_login, created_datetime from user where login_id = %s", (login_id, ))
-    rows = cursor.fetchall()
-    if rows is not None and len():
-        ret['id'] = rows[0][0]
-        ret['login_id'] = rows[0][1]
-        ret['password'] = rows[0][2]
-        ret['last_login'] = rows[0][3]
-        ret['created_datetime'] = rows[0][4]
+#     conn = db.connect()
+#     cursor = conn.cursor()
+#     cursor.execute("select id, login_id, password, last_login, created_datetime from user where login_id = %s", (login_id, ))
+#     rows = cursor.fetchall()
+#     if rows is not None and len():
+#         ret['id'] = rows[0][0]
+#         ret['login_id'] = rows[0][1]
+#         ret['password'] = rows[0][2]
+#         ret['last_login'] = rows[0][3]
+#         ret['created_datetime'] = rows[0][4]
 
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return ret
+#     conn.commit()
+#     cursor.close()
+#     conn.close()
+#     return ret

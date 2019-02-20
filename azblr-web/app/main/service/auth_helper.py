@@ -15,7 +15,7 @@ class Auth:
             cursor = conn.cursor()
             cursor.execute("select id, login_id, password, last_login, created_datetime from user where login_id = %s", (data.get('login_id'), ))
             rows = cursor.fetchall()
-            if rows is not None and len(rows) == 1:
+            if len(rows) == 1:
                 user['id'] = rows[0][0]
                 user['login_id'] = rows[0][1]
                 user['password'] = rows[0][2]
@@ -111,6 +111,14 @@ class Auth:
     def decode_auth_token(auth_token):
         try:
             payload = jwt.decode(auth_token, key)
+            conn = db.connect()
+            cursor = conn.cursor()
+            cursor.execute("select id from user where token = %s", (str(auth_token),))
+            rows = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            if len(rows) == 0 or payload['sub'] != rows[0][0]:
+                raise jwt.InvalidTokenError
             return payload['sub']
         except jwt.ExpiredSignatureError:
             return 'Signature expired. Please log in again.'
@@ -138,6 +146,9 @@ class Auth:
                         'created_datetime': str(rows[0][2])
                     }
                 }
+
+                cursor.close()
+                conn.close()
                 return response_object, 200
             response_object = {
                 'status': 'fail',

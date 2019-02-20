@@ -11,6 +11,7 @@ api = ItemDto.api
 @api.param('item_id', 'The Azerite Item ID')
 class Item(Resource):
     @api.doc('get a azerite item information')
+    @token_required
     def get(self, item_id):
         """get a azerite item given its identifier"""
         return get_item_info(item_id)
