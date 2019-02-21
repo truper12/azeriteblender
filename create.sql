@@ -79,6 +79,14 @@ INSERT INTO `m_inventory_type` (`id`, `name`) VALUES ('1', '머리');
 INSERT INTO `m_inventory_type` (`id`, `name`) VALUES ('3', '어깨');
 INSERT INTO `m_inventory_type` (`id`, `name`) VALUES ('5', '가슴');
 
+CREATE TABLE `m_fight_style` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`));
+
+INSERT INTO `m_fight_style` (`id`, `name`, `name_en`) VALUES ('1', '단일 타겟', 'patchwerk');
+INSERT INTO `m_fight_style` (`id`, `name`, `name_en`) VALUES ('2', '다중 타겟', 'hecticaddcleave');
+
 
 CREATE TABLE `user` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -135,13 +143,14 @@ CREATE TABLE `crawler` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `class_id` INT NOT NULL,
   `specialization_id` INT NOT NULL,
-  `fight_style` VARCHAR(45) NOT NULL,
+  `fight_style_id` INT NOT NULL,
   `updated_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_crawler_class_id_idx` (`class_id` ASC),
   INDEX `fk_crawler_specialization_id_idx` (`specialization_id` ASC),
-  UNIQUE INDEX `unique` (`class_id` ASC, `specialization_id` ASC, `fight_style` ASC),
+  INDEX `fk_crawler_fight_style_id_idx` (`fight_style_id` ASC),
+  UNIQUE INDEX `unique` (`class_id` ASC, `specialization_id` ASC, `fight_style_id` ASC),
   CONSTRAINT `fk_crawler_class_id`
     FOREIGN KEY (`class_id`)
     REFERENCES `m_class` (`id`)
@@ -151,19 +160,26 @@ CREATE TABLE `crawler` (
     FOREIGN KEY (`specialization_id`)
     REFERENCES `m_class_specialization` (`id`)
     ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_crawler_fight_style_id`
+    FOREIGN KEY (`fight_style_id`)
+    REFERENCES `m_fight_style` (`id`)
+    ON DELETE CASCADE
     ON UPDATE RESTRICT);
 
 CREATE TABLE `crawler_score` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `crawler_id` INT NOT NULL,
   `spell_id` INT NOT NULL,
+  `sub_spell_name` VARCHAR(45) NOT NULL,
+  `sub_spell_id` VARCHAR(45) NULL,
   `count` INT NOT NULL,
   `item_level` INT NOT NULL,
   `score` INT NOT NULL,
   `created_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_cs_crawler_id_idx` (`crawler_id` ASC),
-  UNIQUE INDEX `unique` (`crawler_id` ASC, `spell_id` ASC, `count` ASC, `item_level` ASC),
+  UNIQUE INDEX `unique` (`crawler_id` ASC, `spell_id` ASC, `sub_spell_name` ASC, `count` ASC, `item_level` ASC),
   CONSTRAINT `fk_cs_crawler_id`
     FOREIGN KEY (`crawler_id`)
     REFERENCES `crawler` (`id`)

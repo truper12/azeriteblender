@@ -9,6 +9,7 @@ python pakages:
     flask-script
     pyjwt
     requests
+    apscheduler
 # flask-sqlalchemy
 # flask-restful
 
