@@ -13,6 +13,7 @@ def token_required(f):
         if not token:
             return data, status
 
+        kwargs['user_id'] = token['user_id']
         return f(*args, **kwargs)
 
     return decorated

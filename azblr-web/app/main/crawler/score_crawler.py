@@ -7,12 +7,12 @@ def crawl():
     conn = db.connect()
     cursor = conn.cursor()
 
-    cursor.execute("select id, name, name_en from m_fight_style")
+    cursor.execute("select id, name_en from m_fight_style")
     fight_styles = cursor.fetchall()
 
     sql = """
     select
-        c.id, c.name, c.name_en, s.id, s.name, s.name_en
+        c.id, c.name_en, s.id, s.name_en
     from m_class as c
     inner join m_class_specialization as s
         on c.id = s.class_id
@@ -21,10 +21,18 @@ def crawl():
     """
     cursor.execute(sql)
     class_specializations = cursor.fetchall()
-    for class_id, class_name, class_name_en, sp_id, sp_name, sp_name_en in class_specializations:
-        for fight_style_id, fight_style_name, fight_style_name_en in fight_styles:
+    for class_id, class_name_en, sp_id, sp_name_en in class_specializations:
+        for fight_style_id, fight_style_name_en in fight_styles:
             try:
-                cursor.execute("insert into crawler (class_id, specialization_id, fight_style_id, created_datetime) values (%s, %s, %s, now()) on duplicate key update updated_datetime = now()", (class_id, sp_id, fight_style_id))
+                sql = """
+                insert into crawler (
+                    class_id, specialization_id, fight_style_id, updated_datetime, created_datetime)
+                values (
+                    %s, %s, %s, now(), now())
+                on duplicate key update
+                    updated_datetime = values(updated_datetime)
+                """
+                cursor.execute(sql, (class_id, sp_id, fight_style_id))
                 crawler_id = cursor.lastrowid
                 url = "https://bloodmallet.com/json/azerite_traits/%s_%s_%s.json" % (class_name_en, sp_name_en, fight_style_name_en)
                 bm_json = requests.get(url).json()

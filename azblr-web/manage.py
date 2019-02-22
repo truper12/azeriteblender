@@ -9,8 +9,7 @@ app.app_context().push()
 
 manager = Manager(app)
 
-# sched.add_job(crawl, 'interval', seconds = 3)
-sched.add_job(crawl, 'cron', second='0', minute='17', hour='19')
+sched.add_job(crawl, 'cron', second='0', minute='0', hour='1') # crawling data every 1:00 AM
 
 @manager.command
 def run():

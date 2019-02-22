@@ -141,6 +141,7 @@ class Auth:
                 response_object = {
                     'status': 'success',
                     'data': {
+                        'user_id': resp,
                         'login_id': rows[0][0],
                         'last_login': str(rows[0][1]),
                         'created_datetime': str(rows[0][2])

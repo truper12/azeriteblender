@@ -16,15 +16,11 @@ def get_item_info(item_id):
                 'id': item['id'],
                 'name': item['name'],
                 'inventoryType': item['inventoryType'],
-                'availableClasses': list(azerite_powers.keys()),
+                'availableClasses': [int(class_id) for class_id in azerite_powers.keys()],
                 'azeriteClassPowers': azerite_powers
             }
 
-            return {
-                'status': 'success',
-                'message': '',
-                'data': data
-            }, 200
+            return data
         else:
             response_object = {
                 'status': 'fail',
@@ -45,11 +41,7 @@ def get_spell_info(spell_id):
         headers = {'Authorization': 'Bearer %s' % (d['access_token'],)}
         spell = requests.get('https://kr.api.blizzard.com/wow/spell/%s' % (spell_id,), data={'region':'kr','locale':'ko_KR'},headers=headers).json()
         if 'id' in spell:
-            return {
-                'status': 'success',
-                'message': '',
-                'data': spell
-            }, 200
+            return spell
         else:
             response_object = {
                 'status': 'fail',
