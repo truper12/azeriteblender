@@ -3,7 +3,6 @@ from flask_restplus import Resource
 
 from ..util.dto import ItemDto
 from ..service.item_info_service import get_item_info, get_item_info_with_spell
-from ..util.decorator import token_required
 
 api = ItemDto.api
 

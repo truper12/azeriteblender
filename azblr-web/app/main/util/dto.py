@@ -21,3 +21,6 @@ class AuthDto:
 
 class ItemDto:
     api = Namespace('item', description='item related operations')
+
+class MetaDto:
+    api = Namespace('meta', description='meta data related operations')
