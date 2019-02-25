@@ -13,10 +13,12 @@ def save_new_user(data):
     if len(rows) == 0:
         hashed_password = flask_bcrypt.generate_password_hash(data['password']).decode('utf-8')
         cursor.execute("insert into user (login_id, password, created_datetime) values (%s, %s, now())", (data['login_id'], hashed_password, ))
-        cursor.execute("select id from user where login_id = $s", (data['login_id'],))
+        cursor.execute("select id from user where login_id = %s", (data['login_id'],))
         rows = cursor.fetchall()
         
-        auth_token = Auth.generate_auth_token(rows[0][0])
+        user_id = rows[0][0]
+        auth_token = Auth.generate_auth_token(user_id)
+        cursor.execute("update user set token = %s, last_login = now() where id=%s", (auth_token.decode(), user_id,))
         response_object = {
             'status': 'success',
             'message': 'Successfully registered.',
