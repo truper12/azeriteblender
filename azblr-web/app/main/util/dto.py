@@ -21,16 +21,3 @@ class AuthDto:
 
 class ItemDto:
     api = Namespace('item', description='item related operations')
-    # item = api.model('item', {
-    #     'id': fields.Integer(require=True),
-    #     'name': fields.String,
-    #     'inventoryType': fields.Integer,
-    #     'azeriteClassPowers': {
-    #         '<classId>': fields.List(fields.Nested({
-    #             'id': fields.Integer,
-    #             'tier': fields.Integer,
-    #             'spellId': fields.Integer,
-    #             'bonusListId': fields.Integer
-    #         }))
-    #     }
-    # })
