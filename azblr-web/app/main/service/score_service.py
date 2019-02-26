@@ -1,5 +1,6 @@
 from app.main import db
 from app.main.service.meta_service import get_inventory_types, get_fight_styles
+from itertools import product
 
 def score(data):
     inventory_types = get_inventory_types()
@@ -17,10 +18,10 @@ def score(data):
         cursor.execute("select id from crawler where class_id = %s and specialization_id = %s", (class_id, specialization_id))
         crawer_ids = [r[0] for r in cursor]
         for azeritePower in item['azeritePowers']:
-            sql = "select any_value(sub_spell_name), any_value(sub_spell_id) from crawler_score where crawler_id in "+str(tuple(crawer_ids))+" and spell_id = %s group by sub_spell_name"
+            sql = "select sub_spell_name, sub_spell_id from crawler_score where crawler_id in "+str(tuple(crawer_ids))+" and spell_id = %s group by sub_spell_name"
             cursor.execute(sql, azeritePower['spellId'])
             for r in cursor:
-                power = {'spellId': azeritePower['spellId'], 'spellName': azeritePower['spellName'], 'subSpellName': r[0], 'subSpellId': r[1]}
+                power = {'spellId': azeritePower['spellId'], 'spellName': azeritePower['spellName'], 'subSpellName': r[0], 'subSpellId': r[1], 'tier': azeritePower['tier']}
                 if azeritePower['tier'] in grouped_powers:
                     grouped_powers[azeritePower['tier']].append(power)
                 else:
@@ -34,6 +35,11 @@ def score(data):
             grouped_items[item['inventoryType']] = [item,]
         
         del item['azeritePowers'] ###
+    
+    for p_items in product(*grouped_items.values()):
+        for p_powers in product(*[p['groupedPowers'].values() for p in p_items]):
+            print(p_powers)
+
 
     # ret = {
     #     'class_id': 3,
