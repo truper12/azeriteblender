@@ -82,12 +82,11 @@ INSERT INTO `m_inventory_type` (`id`, `name`) VALUES ('5', '가슴');
 CREATE TABLE `m_fight_style` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
-  `name_en` VARCHAR(45) NULL,
+  `name_en` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`));
 
 INSERT INTO `m_fight_style` (`id`, `name`, `name_en`) VALUES ('1', '단일 타겟', 'patchwerk');
 INSERT INTO `m_fight_style` (`id`, `name`, `name_en`) VALUES ('2', '다중 타겟', 'hecticaddcleave');
-INSERT INTO `m_fight_style` (`id`, `name`) VALUES ('3', '단일+다중');
 
 
 CREATE TABLE `user` (
