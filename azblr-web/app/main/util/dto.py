@@ -8,7 +8,7 @@ class UserDto:
     })
     user_class = api.model('user_class', {
         'class_id': fields.Integer(require=True, description = 'class id'),
-        'specialization_ids': fields.List(fields.Integer, description = 'list of specialization_ids'),
+        'specialization_id': fields.Integer(require=True, description = 'specialization id'),
         'item_ids': fields.List(fields.Integer, description="list of item ids"),
     })
 

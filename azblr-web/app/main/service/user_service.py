@@ -41,30 +41,21 @@ def save_new_user(data):
 
 def save_user_class(user_id, data):
     class_id = data['class_id']
-    specialization_ids = data['specialization_ids']
+    specialization_id = data['specialization_id']
     item_ids = data['item_ids']
 
     conn = db.connect()
     cursor = conn.cursor()
     sql = """
     insert into user_class (
-        user_id, class_id, updated_datetime, created_datetime)
+        user_id, class_id, specialization_id, updated_datetime, created_datetime)
     values (
-        %s, %s, now(), now())
+        %s, %s, %s, now(), now())
     on duplicate key update
         updated_datetime = values(updated_datetime)
     """
-    cursor.execute(sql, (user_id, class_id))
+    cursor.execute(sql, (user_id, class_id, specialization_id))
     user_class_id = cursor.lastrowid
-
-    cursor.execute("delete from user_class_specialization where user_class_id = %s", (user_class_id,))
-    sql = """
-    insert into user_class_specialization (
-        user_class_id, specialization_id, priority, created_datetime
-    ) values (%s, %s, %s, now())
-    """
-    print([(user_class_id, val, idx) for idx, val in enumerate(specialization_ids)])
-    cursor.executemany(sql, [(user_class_id, val, idx) for idx, val in enumerate(specialization_ids)])
 
     cursor.execute("delete from user_class_item where user_class_id = %s", (user_class_id,))
     sql = """

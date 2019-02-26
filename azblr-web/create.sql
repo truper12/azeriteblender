@@ -104,12 +104,14 @@ CREATE TABLE `user_class` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `class_id` INT NOT NULL,
+  `specialization_id` INT NOT NULL,
   `updated_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_uc_user_id_idx` (`user_id` ASC),
   INDEX `fk_uc_class_id_idx` (`class_id` ASC),
-  UNIQUE INDEX `unique` (`user_id` ASC, `class_id` ASC),
+  INDEX `fk_uc_specialization_id_idx` (`specialization_id` ASC),
+  UNIQUE INDEX `unique` (`user_id` ASC, `class_id` ASC, `specialization_id` ASC),
   CONSTRAINT `fk_uc_user_id`
     FOREIGN KEY (`user_id`)
     REFERENCES `user` (`id`)
@@ -119,24 +121,8 @@ CREATE TABLE `user_class` (
     FOREIGN KEY (`class_id`)
     REFERENCES `m_class` (`id`)
     ON DELETE CASCADE
-    ON UPDATE RESTRICT);
-    
-CREATE TABLE `user_class_specialization` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `user_class_id` INT NOT NULL,
-  `specialization_id` INT NOT NULL,
-  `priority` INT NOT NULL,
-  `created_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  INDEX `fk_ucs_user_class_id_idx` (`user_class_id` ASC),
-  INDEX `fk_ucs_specialization_id_idx` (`specialization_id` ASC),
-  UNIQUE INDEX `unique` (`user_class_id` ASC, `specialization_id` ASC, `priority` ASC),
-  CONSTRAINT `fk_ucs_user_class_id`
-    FOREIGN KEY (`user_class_id`)
-    REFERENCES `user_class` (`id`)
-    ON DELETE CASCADE
     ON UPDATE RESTRICT,
-  CONSTRAINT `fk_ucs_specialization_id`
+  CONSTRAINT `fk_uc_specialization_id`
     FOREIGN KEY (`specialization_id`)
     REFERENCES `m_class_specialization` (`id`)
     ON DELETE CASCADE
@@ -152,8 +138,8 @@ CREATE TABLE `user_class_item` (
   CONSTRAINT `fk_uci_user_class_id`
     FOREIGN KEY (`user_class_id`)
     REFERENCES `user_class` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT);
 
 CREATE TABLE `crawler` (
   `id` INT NOT NULL AUTO_INCREMENT,
