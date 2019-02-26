@@ -1,7 +1,9 @@
 from ..config import blz_client_key, blz_secret_key
+from app.main.service.meta_service import get_inventory_types
 import requests
 
 def get_item_info(item_id):
+    inventory = get_inventory_types()
     try:
         d = requests.post('https://kr.battle.net/oauth/token', data={'grant_type':'client_credentials'}, auth=(blz_client_key,blz_secret_key)).json()
         headers = {'Authorization': 'Bearer %s' % (d['access_token'],)}
@@ -12,6 +14,7 @@ def get_item_info(item_id):
                 'id': item['id'],
                 'name': item['name'],
                 'inventoryType': item['inventoryType'],
+                'inventoryName': inventory[item['inventoryType']],
                 'availableClasses': [int(class_id) for class_id in azerite_powers.keys()],
                 'azeriteClassPowers': azerite_powers
             }
@@ -31,6 +34,7 @@ def get_item_info(item_id):
         return response_object, 500
 
 def get_item_info_with_spell(item_id, class_id):
+    inventory = get_inventory_types()
     try:
         d = requests.post('https://kr.battle.net/oauth/token', data={'grant_type':'client_credentials'}, auth=(blz_client_key,blz_secret_key)).json()
         headers = {'Authorization': 'Bearer %s' % (d['access_token'],)}
@@ -45,6 +49,7 @@ def get_item_info_with_spell(item_id, class_id):
                     'id': item['id'],
                     'name': item['name'],
                     'inventoryType': item['inventoryType'],
+                    'inventoryName': inventory[item['inventoryType']],
                     'azeritePowers': azerite_powers[class_id]
                 }
 
