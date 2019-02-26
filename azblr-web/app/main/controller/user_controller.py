@@ -11,7 +11,7 @@ _user = UserDto.user
 _user_class = UserDto.user_class
 
 
-@api.route('/')
+@api.route('')
 class User(Resource):
     # @api.doc('list_of_registered_users')
     # @api.marshal_list_with(_user, envelope='data')
@@ -29,12 +29,12 @@ class User(Resource):
 
 @api.route('/class')
 class UserClass(Resource):
-    @api.response(200, 'User class, specializations, items successfully saved.')
-    @api.doc('save class, specializations, items')
+    @api.response(200, 'User class, specialization, items successfully saved.')
+    @api.doc('save class, specialization, items')
     @api.expect(_user_class, validate=True)
     @token_required
     def put(self, user_id):
-        """Saves user's class, specializations, items"""
+        """Saves user's class, specialization, items"""
         return save_user_class(user_id, request.json)
 
 @api.route('/class/<class_id>')

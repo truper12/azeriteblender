@@ -24,3 +24,6 @@ class ItemDto:
 
 class MetaDto:
     api = Namespace('meta', description='meta data related operations')
+
+class ScoreDto:
+    api = Namespace('score', description='scoring related operations')
