@@ -1,8 +1,13 @@
 from app.main import db
+from app.main.service.meta_service import get_inventory_types, get_fight_styles
 
 def score(data):
-    class_id = data[]
-    heads = data[1]
-    shoulders = data[3]
-    chests = data[5]
+    inventory_types = get_inventory_types()
+    fight_styles = get_fight_styles()
+
+    class_id = data['class_id']
+    spcializations = data['specialiazations']
+    items = data['item']
+
+
     return

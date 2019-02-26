@@ -7,7 +7,7 @@ def crawl():
     conn = db.connect()
     cursor = conn.cursor()
 
-    cursor.execute("select id, name_en from m_fight_style")
+    cursor.execute("select id, name_en from m_fight_style where name_en is not null")
     fight_styles = cursor.fetchall()
 
     sql = """

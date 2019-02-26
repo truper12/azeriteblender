@@ -20,4 +20,5 @@ class Item(Resource):
 class ItemClass(Resource):
     @api.doc('get a azerite item information with class power detailed')
     def get(self, item_id, class_id):
+        """get a azerite item with azerite power details of the given class id"""
         return get_item_info_with_spell(item_id, class_id)

@@ -21,3 +21,12 @@ def get_inventory_types():
     cursor.close()
     conn.close()
     return inventory
+
+def get_fight_styles():
+    conn = db.connect()
+    cursor = conn.cursor()
+    cursor.execute("select id, name from m_fight_style ")
+    fight_style = {row[0]: row[1] for row in cursor}
+    cursor.close()
+    conn.close()
+    return fight_style
