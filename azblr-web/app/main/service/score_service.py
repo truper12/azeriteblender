@@ -1,7 +1,6 @@
 from app.main import db
 from app.main.service.meta_service import get_inventory_types, get_fight_styles
 from itertools import product
-from copy import deepcopy
 
 def score(data):
     inventory_types = get_inventory_types()
@@ -13,7 +12,7 @@ def score(data):
     class_id = data['class_id']
     specialization_id = data['specialization_id']
     items = data['items']
-    grouped_items = {}
+    selected_items = {}
     for item in items:
         grouped_powers = {}
         cursor.execute("select id from crawler where class_id = %s and specialization_id = %s", (class_id, specialization_id))
@@ -28,43 +27,39 @@ def score(data):
                 else:
                     grouped_powers[azeritePower['tier']] = [power,]
         
-        item['groupedPowers'] = grouped_powers
-        
-        if item['inventoryType'] in grouped_items:
-            grouped_items[item['inventoryType']].append(item)
-        else:
-            grouped_items[item['inventoryType']] = [item,]
-        
         del item['azeritePowers'] ###
+        for power_comb in product(*grouped_powers.values()):
+            selected_item = {
+                "id": item['id'],
+                "name": item['name'],
+                "inventoryType": item['inventoryType'],
+                "inventoryName": item['inventoryName'],
+                "selectedPower": power_comb
+            }
+            if item['inventoryType'] in selected_items:
+                selected_items[item['inventoryType']].append(selected_item)
+            else:
+                selected_items[item['inventoryType']] = [selected_item,]
 
     ret = {
         "class_id": class_id,
         "specialization_id": specialization_id
     }
     scored_items = []
-    for item_comb in product(*grouped_items.values()):
-        item_set = {}
+    for item_comb in product(*selected_items.values()):
+        item_set = {"items": item_comb}
         power_set = {}
         for item in item_comb:
-            for power_comb in product(*item['groupedPowers'].values()):
-                item_set[item['inventoryName']] = {
-                    "id": item['id'],
-                    "name": item['name'],
-                    "inventoryType": item['inventoryType'],
-                    "inventoryName": item['inventoryName'],
-                    "selectedPower": power_comb
-                }
-                
-            for power in power_comb:
+            for power in item['selectedPower']:
                 power_key = str(power['spellId'])+power['subSpellName']
                 if power_key in power_set:
                     power_set[power_key] += 1
                 else:
                     power_set[power_key] = 1
         ##scoring
-        print(power_set)
+        # item_set["score"] = random.randint(1000,2000)
         scored_items.append(item_set)
+    ret["scored_items"] = sorted(scored_items, key=lambda i: i["score"], reverse=True)
 
-    ret["scored_items"] = scored_items
 
     return ret
