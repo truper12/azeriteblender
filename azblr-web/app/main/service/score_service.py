@@ -56,8 +56,8 @@ def score(data):
                     power_set[power_key] += 1
                 else:
                     power_set[power_key] = 1
+
         ##scoring
-        # import random
         item_set["score"] = {}
         for p in power_set:
             spell_id, sub_spell_name = p.split(" ")
@@ -73,17 +73,17 @@ def score(data):
                 else:
                     score = 0
 
-                if fight_styles[fight_style_id] in item_set["score"]:
+                if fight_style_id in item_set["score"]:
                     item_set["score"][fight_style_id] += score
                 else:
                     item_set["score"][fight_style_id] = score
         item_set["score"][3] = sum(item_set["score"].values())
         scored_items.append(item_set)
         
-    ret["scored_items"] = scored_items
+    # ret["scored_items"] = scored_items
     # ret["scored_items"] = sorted(scored_items, key=lambda i: i["score"], reverse=True)
-    ret["score_order"]["단일"] = sorted(scored_items, key=lambda i: i["score"][1], reverse=True)[:5]
-    ret["score_order"]["다중"] = sorted(scored_items, key=lambda i: i["score"][2], reverse=True)[:5]
-    ret["score_order"]["단일+다중"] = sorted(scored_items, key=lambda i: i["score"][3], reverse=True)[:5]
+    ret["score_order"]["단일"] = sorted(scored_items, key=lambda i: i["score"][1], reverse=True)[:10]
+    ret["score_order"]["다중"] = sorted(scored_items, key=lambda i: i["score"][2], reverse=True)[:10]
+    ret["score_order"]["단일+다중"] = sorted(scored_items, key=lambda i: i["score"][3], reverse=True)[:10]
 
     return ret
