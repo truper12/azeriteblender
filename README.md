@@ -7,6 +7,7 @@ python pakages:
     flask-mysql
     flask-bcrypt
     flask-script
+    flask-cors
     pyjwt
     requests
     apscheduler
