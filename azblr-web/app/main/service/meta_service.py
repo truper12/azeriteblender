@@ -16,8 +16,8 @@ def get_available_class_specializations():
 def get_inventory_types():
     conn = db.connect()
     cursor = conn.cursor()
-    cursor.execute("select id, name from m_inventory_type")
-    inventory = {row[0]: row[1] for row in cursor}
+    cursor.execute("select id, name, slot_to from m_inventory_type")
+    inventory = {row[0]: [row[1],row[2]] for row in cursor}
     cursor.close()
     conn.close()
     return inventory

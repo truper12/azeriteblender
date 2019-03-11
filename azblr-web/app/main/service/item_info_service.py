@@ -14,7 +14,8 @@ def get_item_info(item_id):
                 'id': item['id'],
                 'name': item['name'],
                 'inventoryType': item['inventoryType'],
-                'inventoryName': inventory[item['inventoryType']],
+                'inventoryName': inventory[item['inventoryType']][0],
+                'slotTo': inventory[item['inventoryType']][1],
                 'availableClasses': [int(class_id) for class_id in azerite_powers.keys()],
                 'azeriteClassPowers': azerite_powers
             }
@@ -49,7 +50,8 @@ def get_item_info_with_spell(item_id, class_id):
                     'id': item['id'],
                     'name': item['name'],
                     'inventoryType': item['inventoryType'],
-                    'inventoryName': inventory[item['inventoryType']],
+                    'inventoryName': inventory[item['inventoryType']][0],
+                    'slotTo': inventory[item['inventoryType']][1],
                     'azeritePowers': azerite_powers[class_id]
                 }
 

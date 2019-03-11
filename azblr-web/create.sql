@@ -73,11 +73,13 @@ INSERT INTO `m_class_specialization` (`id`, `class_id`, `name`, `name_en`, `avai
 CREATE TABLE `m_inventory_type` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
+  `slot_to` INT NOT NULL,
   PRIMARY KEY (`id`));
 
-INSERT INTO `m_inventory_type` (`id`, `name`) VALUES ('1', '머리');
-INSERT INTO `m_inventory_type` (`id`, `name`) VALUES ('3', '어깨');
-INSERT INTO `m_inventory_type` (`id`, `name`) VALUES ('5', '가슴');
+INSERT INTO `m_inventory_type` (`id`, `name`, `slot_to`) VALUES ('1', '머리', `1`);
+INSERT INTO `m_inventory_type` (`id`, `name`, `slot_to`) VALUES ('3', '어깨', `3`);
+INSERT INTO `m_inventory_type` (`id`, `name`, `slot_to`) VALUES ('5', '가슴', `5`);
+INSERT INTO `m_inventory_type` (`id`, `name`, `slot_to`) VALUES ('5', '로브(가슴)', `5`);
 
 CREATE TABLE `m_fight_style` (
   `id` INT NOT NULL,

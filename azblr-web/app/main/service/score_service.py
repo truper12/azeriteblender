@@ -1,5 +1,5 @@
 from app.main import db
-from app.main.service.meta_service import get_inventory_types, get_fight_styles
+from app.main.service.meta_service import get_fight_styles
 from itertools import product
 
 def score(data):
@@ -31,14 +31,14 @@ def score(data):
             selected_item = {
                 "id": item['id'],
                 "name": item['name'],
-                "inventoryType": item['inventoryType'],
+                "slotTo": item['slotTo'],
                 "inventoryName": item['inventoryName'],
                 "selectedPower": power_comb
             }
-            if item['inventoryType'] in selected_items:
-                selected_items[item['inventoryType']].append(selected_item)
+            if item['slotTo'] in selected_items:
+                selected_items[item['slotTo']].append(selected_item)
             else:
-                selected_items[item['inventoryType']] = [selected_item,]
+                selected_items[item['slotTo']] = [selected_item,]
 
     ret = {
         "class_id": class_id,
@@ -80,8 +80,6 @@ def score(data):
         item_set["score"][3] = sum(item_set["score"].values())
         scored_items.append(item_set)
         
-    # ret["scored_items"] = scored_items
-    # ret["scored_items"] = sorted(scored_items, key=lambda i: i["score"], reverse=True)
     ret["score_order"]["단일"] = sorted(scored_items, key=lambda i: i["score"][1], reverse=True)[:10]
     ret["score_order"]["다중"] = sorted(scored_items, key=lambda i: i["score"][2], reverse=True)[:10]
     ret["score_order"]["단일+다중"] = sorted(scored_items, key=lambda i: i["score"][3], reverse=True)[:10]
