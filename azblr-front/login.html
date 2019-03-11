@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/signin.css">
+
+    <title>AzeriteBlender</title>
+  </head>
+  <body>
+      <form class="form-signin" id="login-form">
+          <h1 class="h3 mb-3 font-weight-normal">AzeriteBlender 로그인</h1>
+          <label for="inputID" class="sr-only">ID</label>
+          <input type="text" id="inputID" class="form-control" placeholder="ID" required autofocus>
+          <label for="inputPassword" class="sr-only">패스워드</label>
+          <input type="password" id="inputPassword" class="form-control" placeholder="패스워드" required>
+          <button class="btn btn-lg btn-primary btn-block" type="button" id="submit-button">로그인</button>
+        </form>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#submit-button').click(function() {
+          $.ajax({
+            url: 'http://localhost:5000/auth/login',
+            type: 'post',
+            data: JSON.stringify({'login_id':$('#inputID').val(), 'password': $('#inputPassword').val()}),
+            contentType: 'application/json',
+            success:function(data) {
+              sessionStorage.setItem("azblr-tk", data['Authorization'])
+              window.location.href = "/main.html";
+            }
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
