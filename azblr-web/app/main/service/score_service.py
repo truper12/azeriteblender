@@ -3,21 +3,23 @@ from app.main.service.meta_service import get_fight_styles
 from itertools import product
 
 def score(data):
+    class_id = data['class_id']
+    specialization_id = data['specialization_id']
+    items = data['items']
+
     fight_styles = get_fight_styles()
 
     conn = db.connect()
     cursor = conn.cursor()
+    cursor.execute("select id from crawler where class_id = %s and specialization_id = %s", (class_id, specialization_id))
+    crawler_ids = tuple([r[0] for r in cursor])
 
-    class_id = data['class_id']
-    specialization_id = data['specialization_id']
-    items = data['items']
     selected_items = {}
     for item in items:
         grouped_powers = {}
-        cursor.execute("select id from crawler where class_id = %s and specialization_id = %s", (class_id, specialization_id))
-        crawler_ids = [r[0] for r in cursor]
+        
         for azeritePower in item['azeritePowers']:
-            sql = "select sub_spell_name, sub_spell_id from crawler_score where crawler_id in "+str(tuple(crawler_ids))+" and spell_id = %s group by sub_spell_name, sub_spell_id"
+            sql = "select sub_spell_name, sub_spell_id from crawler_score where crawler_id in "+str(crawler_ids)+" and spell_id = %s group by sub_spell_name, sub_spell_id"
             cursor.execute(sql, azeritePower['spellId'])
             for r in cursor:
                 power = {'spellId': azeritePower['spellId'], 'spellName': azeritePower['spellName'], 'subSpellName': r[0], 'subSpellId': r[1], 'tier': azeritePower['tier']}
@@ -79,7 +81,7 @@ def score(data):
                     item_set["score"][fight_style_id] = score
         item_set["score"][3] = sum(item_set["score"].values())
         scored_items.append(item_set)
-        
+
     ret["score_order"]["단일"] = sorted(scored_items, key=lambda i: i["score"][1], reverse=True)[:10]
     ret["score_order"]["다중"] = sorted(scored_items, key=lambda i: i["score"][2], reverse=True)[:10]
     ret["score_order"]["단일+다중"] = sorted(scored_items, key=lambda i: i["score"][3], reverse=True)[:10]
