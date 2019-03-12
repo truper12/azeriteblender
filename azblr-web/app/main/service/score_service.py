@@ -41,7 +41,29 @@ def score(data):
                 selected_items[item['slotTo']].append(selected_item)
             else:
                 selected_items[item['slotTo']] = [selected_item,]
-
+    
+    score_data = {}
+    sql = """
+    select c.fight_style_id, cs.spell_id, cs.sub_spell_name, cs.count, cs.score
+    from crawler_score cs inner join crawler c on cs.crawler_id = c.id
+    where c.id in %s
+    order by cs.count desc, cs.item_level desc """ % str(crawler_ids)
+    cursor.execute(sql)
+    for r in cursor:
+        key = "%s %s" % (r[1], r[2])
+        if r[0] in score_data:
+            if key in score_data[r[0]]:
+                if r[3] not in score_data[r[0]][key]:
+                    score_data[r[0]][key][r[3]] = r[4]
+            else:
+                score_data[r[0]][key] = {r[3]: r[4]}
+        else:
+            score_data[r[0]] = {
+                key: {
+                    r[3]: r[4]
+                }
+            }
+            
     ret = {
         "class_id": class_id,
         "specialization_id": specialization_id,
@@ -62,18 +84,12 @@ def score(data):
         ##scoring
         item_set["score"] = {}
         for p in power_set:
-            spell_id, sub_spell_name = p.split(" ")
             for fight_style_id in fight_styles:
-                cursor.execute("select id from crawler where class_id=%s and specialization_id=%s and fight_style_id=%s",
-                (class_id, specialization_id, fight_style_id))
-                crawler_id = cursor.fetchone()[0]
-                cursor.execute("select score from crawler_score where crawler_id = %s and spell_id = %s and sub_spell_name = %s and count <= %s order by count desc, item_level desc limit 1",
-                (crawler_id, spell_id, sub_spell_name, power_set[p]))
-                row = cursor.fetchone()
-                if row is not None:
-                    score = row[0]
-                else:
-                    score = 0
+                score = 0
+                if fight_style_id in score_data:
+                    if p in score_data[fight_style_id]:
+                        if power_set[p] in score_data[fight_style_id][p]:
+                            score = score_data[fight_style_id][p][power_set[p]]
 
                 if fight_style_id in item_set["score"]:
                     item_set["score"][fight_style_id] += score
