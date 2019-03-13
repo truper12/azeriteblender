@@ -9,17 +9,12 @@ from ..util.decorator import token_required
 api = UserDto.api
 _user = UserDto.user
 _user_class = UserDto.user_class
+parser = api.parser()
+parser.add_argument('Authorization', type=str, location='headers', required=True)
 
 
 @api.route('')
 class User(Resource):
-    # @api.doc('list_of_registered_users')
-    # @api.marshal_list_with(_user, envelope='data')
-    # @token_required
-    # def get(self):
-    #     """List all registered users"""
-    #     return get_all_users()
-
     @api.response(201, 'User successfully created.')
     @api.doc('create a new user')
     @api.expect(_user, validate=True)
@@ -30,39 +25,24 @@ class User(Resource):
 @api.route('/class')
 class UserClass(Resource):
     @api.response(200, 'User class, specialization, items successfully saved.')
-    @api.doc('save class, specialization, items')
-    @api.expect(_user_class, validate=True)
+    @api.doc('save class, specialization, items', parser=parser, body=_user_class)
     @token_required
     def put(self, user_id):
         """Saves user's class, specialization, items"""
         return save_user_class(user_id, request.json)
 
-@api.route('/class/<class_id>')
+@api.route('/class/<class_id>/<specialization_id>')
 @api.param('class_id', 'User Class Identifier')
+@api.param('specialization_id', 'User Class Specialization Identifier')
 @api.response(404, 'User Class not found.')
 class UserClassList(Resource):    
-    @api.doc('get specializations, items of class')
+    @api.doc('get specializations, items of class', parser=parser)
     @api.marshal_with(_user_class)
     @token_required
-    def get(self, user_id, class_id):
+    def get(self, user_id, class_id, specialization_id):
         """Gets user's specializations, items of class"""
-        user_class = get_user_class(user_id, class_id)
+        user_class = get_user_class(user_id, class_id, specialization_id)
         if not user_class:
             api.abort(404)
         else:
             return user_class
-
-# @api.route('/<login_id>')
-# @api.param('login_id', 'The User identifier')
-# @api.response(404, 'User not found.')
-# class User(Resource):
-#     @api.doc('get a user')
-#     @api.marshal_with(_user)
-#     @token_required
-#     def get(self, login_id):
-#         """get a user given its identifier"""
-#         user = get_a_user(login_id)
-#         if not user:
-#             api.abort(404)
-#         else:
-#             return user

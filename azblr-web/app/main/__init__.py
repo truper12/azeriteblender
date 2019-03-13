@@ -21,7 +21,7 @@ def create_app():
     flask_bcrypt.init_app(app)
     sched.start()
     CORS(app, resources = {
-        r"/*": {"origin": "*"}
+        r"/api/*": {"origin": "*"}
     })
 
     return app

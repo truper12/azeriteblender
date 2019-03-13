@@ -75,67 +75,23 @@ def save_user_class(user_id, data):
     conn.close()
     return response_object, 200
 
-def get_user_class(user_id, class_id):
+def get_user_class(user_id, class_id, specialization_id):
     ret = {}
 
     conn = db.connect()
     cursor = conn.cursor()
-    cursor.execute("select id from user_class where user_id = %s and class_id = %s", (user_id, class_id))
+    cursor.execute("select id from user_class where user_id = %s and class_id = %s and specialization_id = %s", (user_id, class_id, specialization_id))
     row = cursor.fetchone()
     if row is not None:
         user_class_id = row[0]
-        cursor.execute("select specialization_id from user_class_specialization where user_class_id = %s order by priority asc", (user_class_id,))
-        sp_rows = cursor.fetchall()
 
         cursor.execute("select item_id from user_class_item where user_class_id = %s", (user_class_id,))
         item_rows = cursor.fetchall()
 
         ret['class_id'] = class_id
-        ret['specialization_ids'] = [r[0] for r in sp_rows]
+        ret['specialization_id'] = specialization_id
         ret['item_ids'] = [r[0] for r in item_rows]
 
     cursor.close()
     conn.close()
     return ret
-
-
-# def get_all_users():
-#     ret = []
-#     conn = db.connect()
-#     cursor = conn.cursor()
-
-#     cursor.execute("select id, login_id, password, last_login, created_datetime from user")
-#     rows = cursor.fetchall()
-#     for row in rows:
-#         r = {}
-#         r['id'] = row[0]
-#         r['login_id'] = row[1]
-#         r['password'] = row[2]
-#         r['last_login'] = row[3]
-#         r['created_datetime'] = row[4]
-#         ret.append(r)
-
-#     conn.commit()
-#     cursor.close()
-#     conn.close()
-#     return ret
-
-
-# def get_a_user(login_id):
-#     ret = {}
-
-#     conn = db.connect()
-#     cursor = conn.cursor()
-#     cursor.execute("select id, login_id, password, last_login, created_datetime from user where login_id = %s", (login_id, ))
-#     rows = cursor.fetchall()
-#     if rows is not None and len():
-#         ret['id'] = rows[0][0]
-#         ret['login_id'] = rows[0][1]
-#         ret['password'] = rows[0][2]
-#         ret['last_login'] = rows[0][3]
-#         ret['created_datetime'] = rows[0][4]
-
-#     conn.commit()
-#     cursor.close()
-#     conn.close()
-#     return ret

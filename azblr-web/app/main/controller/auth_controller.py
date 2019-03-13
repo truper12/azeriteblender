@@ -6,6 +6,8 @@ from ..util.dto import AuthDto
 
 api = AuthDto.api
 user_auth = AuthDto.user_auth
+parser = api.parser()
+parser.add_argument('Authorization', type=str, location='headers', required=True)
 
 
 @api.route('/login')
@@ -26,7 +28,7 @@ class LogoutAPI(Resource):
     """
     Logout Resource
     """
-    @api.doc('logout a user')
+    @api.doc('logout a user', parser=parser)
     def post(self):
         # get auth token
         auth_header = request.headers.get('Authorization')
