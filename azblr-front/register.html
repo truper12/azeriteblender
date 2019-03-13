@@ -13,13 +13,14 @@
   </head>
   <body>
       <form class="form-signin" id="login-form">
-          <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+          <h1 class="h3 mb-3 font-weight-normal">Register</h1>
           <label for="inputID" class="sr-only">ID</label>
-          <input type="text" id="inputID" class="form-control" placeholder="ID" required autofocus>
+          <input type="text" id="inputID" class="form-control register" placeholder="ID" required autofocus>
           <label for="inputPassword" class="sr-only">패스워드</label>
-          <input type="password" id="inputPassword" class="form-control" placeholder="패스워드" required>
-          <button class="btn btn-lg btn-primary btn-block" type="button" id="submit-button">로그인</button>
-          <a class="btn btn-md btn-link btn-block" href="/register.html" id="register-button">회원가입</a>
+          <input type="password" id="inputPassword" class="form-control password-origin" placeholder="패스워드" required>
+          <label for="inputPasswordCheck" class="sr-only">패스워드 확인</label>
+          <input type="password" id="inputPasswordCheck" class="form-control password-check" placeholder="패스워드 확인" required>
+          <button class="btn btn-lg btn-primary btn-block" type="button" id="submit-button">등록</button>
         </form>
 
     <!-- Optional JavaScript -->
@@ -33,9 +34,11 @@
             alert("ID를 입력해주세요")
           } else if ($('#inputPassword').val() == '') {
             alert("패스워드를 입력해주세요")
+          } else if ($('#inputPassword').val() != $('#inputPasswordCheck').val()){
+            alert("패스워드가 다릅니다.")
           } else {
             $.ajax({
-              url: 'http://localhost:5000/api/auth/login',
+              url: 'http://localhost:5000/api/user',
               type: 'post',
               data: JSON.stringify({'login_id':$('#inputID').val(), 'password': $('#inputPassword').val()}),
               contentType: 'application/json',
@@ -43,11 +46,13 @@
                 sessionStorage.setItem("azblr-tk", data['Authorization'])
                 window.location.href = "/main.html";
               },
-              error:function(data) {
-                alert(data.responseJSON.message)
+              error: function(data) {
+                if (data.status == 409) {
+                  alert(data.responseJSON.message)
+                }
               }
             })
-          } 
+          }
         })
       })
     </script>

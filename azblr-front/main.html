@@ -17,7 +17,7 @@
         <div class="inner">
           <h3 class="masthead-brand">AzeriteBlender</h3>
           <nav class="nav nav-masthead justify-content-center">
-            <a class="d-none nav-link" href="#" id="login-button">로그인</a>
+            <a class="d-none nav-link" href="/login.html" id="login-button">로그인</a>
             <a class="d-none nav-link" href="#" id="logout-button">로그아웃</a>
           </nav>
         </div>
@@ -45,12 +45,25 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script>
       $(document).ready(function() {
-        // sessionStorage.setItem("azblr-tk", "tktktk")
+        // sessionStorage.setItem("azblr-tk", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NTI1Mjg5MDksImlhdCI6MTU1MjQ0MjUwNCwic3ViIjoyfQ.zDHx7mKzOLuxXlLwBhR3mcJrxTSkhxV0fcnlJPQO-DY")
         var tk = sessionStorage.getItem("azblr-tk")
+        var _headers = {}
+        _headers['Authorization'] = tk
         if (tk == null) {
           $('#login-button').removeClass('d-none')
         } else {
           $('#logout-button').removeClass('d-none')
+          $('#logout-button').click(function() {
+            $.ajax({
+              url: 'http://localhost:5000/api/auth/logout',
+              type: 'post',
+              headers: _headers,
+              success: function(data) {
+                sessionStorage.removeItem("azblr-tk")
+                location.reload()
+              }
+            })
+          })
         }
       })
     </script>
