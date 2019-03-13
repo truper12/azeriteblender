@@ -104,3 +104,8 @@ body {
 .mastfoot {
   color: rgba(255, 255, 255, .5);
 }
+
+.modal-content {
+  text-shadow: 0 .05rem .1rem rgba(255, 255, 255, .5);
+  color: black;
+}
