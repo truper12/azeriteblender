@@ -26,18 +26,14 @@
       </header>
     
       <main role="main" class="inner cover">
-        <h1 class="cover-heading">AzeriteBlender</h1>
-        <p class="lead">AzeriteBlender는 <a href="htts://bloodmallet.com">bloodmallet.com</a>의 아제라이트 특성 점수 데이터를 이용하여 당신의 장비들 중 최고의 특성 조합을 계산합니다. 아래에서 직업과 전문화를 선택하세요.</p>
-        <div class="row justify-content-md-center" id="class-row">
+        <div class="row">
+          <form class="form-inline">
+            <label class="sr-only" for="input-item-id">Item ID</label>
+            <input type="text" class="form-control form-control-sm" id="input-item-id" placeholder="Item ID">
+            <button type="button" class="btn btn-dark btn-sm">등록</button>
+          </form>
         </div>
       </main>
-    
-      <footer class="mastfoot mt-auto">
-        <div class="inner">
-          <!-- <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p> -->
-        </div>
-      </footer>
-    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="manual-modal" tabindex="-1" role="dialog" aria-labelledby="manual-modal-title" aria-hidden="true">
@@ -63,6 +59,19 @@
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script>
+      function GetURLParameter(sParam) {
+        var sPageURL = window.location.search.substring(1)
+        var sPageURL = window.location.search.substring(1)
+        var sURLVariables = sPageURL.split('&')
+
+        for (var i = 0; i < sURLVariables.length; i++) {
+          var sParameterName = sURLVariables[i].split('=')
+          if (sParameterName[0] == sParam) {
+            return sParameterName[1];
+          }
+        }
+      }
+      
       $(document).ready(function() {
         // nav bar - login/out
         var tk = sessionStorage.getItem("azblr-tk")
@@ -85,42 +94,11 @@
           })
         }
 
-        // class-specialization
-        $.ajax({
-          url: "http://localhost:5000/api/meta/class",
-          type: 'get',
-          success: function(data) {
-            for(var class_id in data) {
-              var sps = data[class_id]["specializations"]
-
-              var _table = $('<table/>', {
-                class: "table table-dark table-bordered col-"+Object.keys(sps).length,
-                css: {
-                  color: data[class_id]["color"]
-                }
-              }
-              )
-              $('<thead/>').append($('<tr/>').append($('<th/>', {
-                colspan: Object.keys(sps).length,
-                text: data[class_id]["name"]
-              }))).appendTo(_table)
-
-              var _tbody = $('<tbody/>')
-              var _tr = $('<tr/>')
-              for(var sp_id in sps) {
-                $('<td/>').append($('<a/>', {
-                  href: "/scoring.html?class_id="+class_id+"&sp_id="+sp_id,
-                  text: sps[sp_id]['name'],
-                  css: {
-                    color: data[class_id]["color"]
-                  }
-                })).appendTo(_tr)
-              }
-              _table.append(_tbody.append(_tr))
-              $('#class-row').append(_table)
-            }
-          }
-        })
+        // main
+        var class_id = GetURLParameter('class_id')
+        var sp_id = GetURLParameter('sp_id')
+        console.log(class_id)
+        console.log(sp_id)
       })
     </script>
   </body>
