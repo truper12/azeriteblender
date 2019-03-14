@@ -3,11 +3,11 @@ from app.main import db
 def get_available_class_specializations():
     conn = db.connect()
     cursor = conn.cursor()
-    cursor.execute("select id, name from m_class")
-    classes = {row[0]: {'name':row[1], 'specializations': []} for row in cursor}
+    cursor.execute("select id, name, color from m_class")
+    classes = {row[0]: {'name':row[1], 'color':row[2], 'specializations': {}} for row in cursor}
 
     cursor.execute("select id, class_id, name from m_class_specialization where available = 1")
-    for row in cursor: classes[row[1]]['specializations'].append({row[0]:{'name':row[2]}})
+    for row in cursor: classes[row[1]]['specializations'][row[0]] = {"name": row[2]}
     cursor.close()
     conn.close()
 

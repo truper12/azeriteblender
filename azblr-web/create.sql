@@ -2,20 +2,21 @@ CREATE TABLE `m_class` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `name_en` VARCHAR(45) NOT NULL,
+  `color` VARCHAR(45) NOT NULL
   PRIMARY KEY (`id`));
 
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('1', '전사', 'warrior');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('2', '성기사', 'paladin');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('3', '사냥꾼', 'hunter');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('4', '도적', 'rogue');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('5', '사제', 'priest');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('6', '죽음의 기사', 'death_knight');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('7', '주술사', 'shaman');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('8', '마법사', 'mage');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('9', '흑마법사', 'warlock');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('10', '수도사', 'monk');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('11', '드루이드', 'druid');
-INSERT INTO `m_class` (`id`, `name`, `name_en`) VALUES ('12', '악마사냥꾼', 'demon_hunter');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('1', '전사', 'warrior', '#C79C6E');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('2', '성기사', 'paladin', '#F58CBA');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('3', '사냥꾼', 'hunter', '#ABD473');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('4', '도적', 'rogue', '#FFF569');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('5', '사제', 'priest', '#FFFFFF');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('6', '죽음의 기사', 'death_knight', '#C41F3B');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('7', '주술사', 'shaman', '#0070DE');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('8', '마법사', 'mage', '#40C7EB');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('9', '흑마법사', 'warlock', '#8787ED');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('10', '수도사', 'monk', '#00FF96');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('11', '드루이드', 'druid', '#FF7D0A');
+INSERT INTO `m_class` (`id`, `name`, `name_en`, `color`) VALUES ('12', '악마사냥꾼', 'demon_hunter', '#A330C9');
 
 
 CREATE TABLE `m_class_specialization` (
