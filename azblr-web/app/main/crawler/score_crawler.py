@@ -57,6 +57,7 @@ def crawl():
                                 values.append((crawler_id, spell_id, sub_spell_name, sub_spell_id, count, ilvl, bm_json['data'][spell][count_ilvl] - baseline['1_%s'%ilvl]))
                 cursor.execute("delete from crawler_score where crawler_id = %s", (crawler_id,))
                 cursor.executemany("insert into crawler_score (crawler_id, spell_id, sub_spell_name, sub_spell_id, count, item_level, score, created_datetime) values (%s, %s, %s, %s, %s, %s, %s, now())", values)
+                cursor.execute("update crawler set timestamp = %s where id = %s", (bm_json['timestamp'], crawler_id,))
                 conn.commit()
             except Exception as e:
                 print("error occurs during crawling %s %s %s, %s" % (class_name_en, sp_name_en, fight_style_name_en, e))

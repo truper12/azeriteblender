@@ -11,15 +11,20 @@ def score(data):
 
     conn = db.connect()
     cursor = conn.cursor()
-    cursor.execute("select id from crawler where class_id = %s and specialization_id = %s", (class_id, specialization_id))
-    crawler_ids = tuple([r[0] for r in cursor])
+    cursor.execute("select id, fight_style_id, timestamp from crawler where class_id = %s and specialization_id = %s", (class_id, specialization_id))
+    crawler_ids = []
+    timestamps = {}
+    for r in cursor:
+        crawler_ids.append(r[0])
+        timestamps[r[1]] = r[2].strftime("%Y-%m-%d %H:%M")
+    # crawler_ids = tuple([r[0] for r in cursor])
 
     selected_items = {}
     for item in items:
         grouped_powers = {}
         
         for azeritePower in item['azeritePowers']:
-            sql = "select sub_spell_name, sub_spell_id from crawler_score where crawler_id in "+str(crawler_ids)+" and spell_id = %s group by sub_spell_name, sub_spell_id"
+            sql = "select sub_spell_name, sub_spell_id from crawler_score where crawler_id in "+str(tuple(crawler_ids))+" and spell_id = %s group by sub_spell_name, sub_spell_id"
             cursor.execute(sql, azeritePower['spellId'])
             for r in cursor:
                 power = {'spellId': azeritePower['spellId'], 'spellName': azeritePower['spellName'], 'subSpellName': r[0], 'subSpellId': r[1], 'tier': azeritePower['tier']}
@@ -47,7 +52,7 @@ def score(data):
     select c.fight_style_id, cs.spell_id, cs.sub_spell_name, cs.count, cs.score
     from crawler_score cs inner join crawler c on cs.crawler_id = c.id
     where c.id in %s
-    order by cs.count desc, cs.item_level desc """ % str(crawler_ids)
+    order by cs.count desc, cs.item_level desc """ % str(tuple(crawler_ids))
     cursor.execute(sql)
     for r in cursor:
         key = "%s %s" % (r[1], r[2])
@@ -67,6 +72,7 @@ def score(data):
     ret = {
         "class_id": class_id,
         "specialization_id": specialization_id,
+        "timestamps": timestamps,
         "score_order": {}
     }
     scored_items = []
@@ -98,8 +104,8 @@ def score(data):
         item_set["score"][3] = sum(item_set["score"].values())
         scored_items.append(item_set)
 
-    ret["score_order"]["단일"] = sorted(scored_items, key=lambda i: i["score"][1], reverse=True)[:10]
-    ret["score_order"]["다중"] = sorted(scored_items, key=lambda i: i["score"][2], reverse=True)[:10]
-    ret["score_order"]["단일+다중"] = sorted(scored_items, key=lambda i: i["score"][3], reverse=True)[:10]
+    ret["score_order"]["1"] = sorted(scored_items, key=lambda i: i["score"][1], reverse=True)[:3]
+    ret["score_order"]["2"] = sorted(scored_items, key=lambda i: i["score"][2], reverse=True)[:3]
+    ret["score_order"]["1+2"] = sorted(scored_items, key=lambda i: i["score"][3], reverse=True)[:3]
 
     return ret

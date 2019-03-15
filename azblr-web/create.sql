@@ -148,6 +148,7 @@ CREATE TABLE `crawler` (
   `class_id` INT NOT NULL,
   `specialization_id` INT NOT NULL,
   `fight_style_id` INT NOT NULL,
+  `timestamp` DATETIME NULL,
   `updated_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),

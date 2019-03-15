@@ -9,8 +9,8 @@ _score = ScoreDto.score
 
 @api.route('')
 class Item(Resource):
-    @api.doc('get classes and specialization meta data')
+    @api.doc('get scores')
     @api.expect(_score)
     def post(self):
-        """get a azerite item given its identifier"""
+        """get scores"""
         return score(request.json)
