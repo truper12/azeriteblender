@@ -31,10 +31,10 @@ class UserClass(Resource):
         """Saves user's class, specialization, items"""
         return save_user_class(user_id, request.json)
 
-@api.route('/class/<class_id>/<specialization_id>')
+@api.route('/class/<class_id>/specialization/<specialization_id>')
 @api.param('class_id', 'User Class Identifier')
 @api.param('specialization_id', 'User Class Specialization Identifier')
-@api.response(404, 'User Class not found.')
+@api.response(204, 'User Class not found.')
 class UserClassList(Resource):    
     @api.doc('get specializations, items of class', parser=parser)
     @api.marshal_with(_user_class)
@@ -43,6 +43,6 @@ class UserClassList(Resource):
         """Gets user's specializations, items of class"""
         user_class = get_user_class(user_id, class_id, specialization_id)
         if not user_class:
-            api.abort(404)
+            return None, 204
         else:
             return user_class
