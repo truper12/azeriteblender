@@ -13,7 +13,7 @@ $(document).ready(function() {
                 type: 'post',
                 headers: _headers,
                 success: function(data) {
-                    sessionStorage.removeItem("azblr-tk")
+                    sessionStorage.clear()
                     location.reload()
             }
             })

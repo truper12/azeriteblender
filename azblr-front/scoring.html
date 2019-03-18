@@ -30,55 +30,35 @@
         <form class="form-inline pb-4">
           <label class="sr-only" for="input-item-id">Item ID</label>
           <input type="text" class="form-control form-control-sm" id="input-item-id" placeholder="Item ID">
-          <button type="button" class="btn btn-secondary btn-sm ml-1">추가</button>
+          <button type="button" class="btn btn-secondary btn-sm ml-1" id="add-button">추가</button>
         </form>
 
         <!-- added items -->
         <div class="jumbotron jumbotron-item p-4">
           <h5>머리</h5>
-          <div id="item-1">
+          <!-- <div id="item-1">
             <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
             <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
-          </div>
+          </div> -->
           <hr class="my-4">
           <h5>어깨</h5>
-          <div id="item-3">
+          <!-- <div id="item-3">
             <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
             <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
-          </div>
+          </div> -->
           <hr class="my-4">
           <h5>가슴</h5>
-          <div id="item-5">
+          <!-- <div id="item-5">
             <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
             <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
-          </div>
+          </div> -->
         </div>
         <div class="pb-5">
           <button type="button" class="btn btn-primary">BLEND!</button>
         </div>
 
-        <!-- score -->
-        <!-- <div class="jumbotron">
-          <div class="container">
-            <h3>단일</h3>
-            <div id="score-1">
-              <p class="my-2">
-                <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복
-                <p>황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-              </p>
-              <p class="my-2">
-                <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복
-                <p>황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-              </p>
-              <p class="my-2">
-                <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복
-                <p>황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-              </p>
-            </div>
-            <hr class="my-4">
-          </div>
-        </div> -->
-        <div id="result-area">
+        <!-- result -->
+        <div id="result-area" class="d-none">
           <h2>Result</h3>
           <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
             <ol class="carousel-indicators">
@@ -90,47 +70,163 @@
               <div class="carousel-item active">
                 <div class="jumbotron jumbotron-score p-4">
                   <h3>단일</h3>
+                  <span>updated : 2019-01-01 01:01</span>
                   <div class="py-2">
                     <h5>1</h5>
-                    <p class="my-1"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 - 황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택</p>
-                    <p class="my-1"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 - 황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-                    <p class="my-1"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 - 황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
                     <span>점수 : 1512</span>
+                  </div>
+                  <div class="py-2">
+                    <h5>2</h5>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <span>점수 : 1511</span>
+                  </div>
+                  <div class="py-2">
+                    <h5>3</h5>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <span>점수 : 1510</span>
                   </div>
                 </div>
               </div>
               <div class="carousel-item">
-                <div class="jumbotron p-4">
-                  <h4>다중</h4>
-                  <p class="my-2">
-                    <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복
-                    <p>황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-                  </p>
-                  <p class="my-2">
-                    <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복
-                    <p>황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-                  </p>
-                  <p class="my-2">
-                    <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복
-                    <p>황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-                  </p>
+                <div class="jumbotron jumbotron-score p-4">
+                  <h3>다중</h3>
+                  <span>updated : 2019-01-01 01:01</span>
+                  <div class="py-2">
+                    <h5>1</h5>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <span>점수 : 1512</span>
+                  </div>
+                  <div class="py-2">
+                    <h5>2</h5>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상
+                    </p>
+                    <span>점수 : 1511</span>
+                  </div>
+                  <div class="py-2">
+                    <h5>3</h5>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상
+                    </p>
+                    <span>점수 : 1510</span>
+                  </div>
                 </div>
               </div>
               <div class="carousel-item">
-                <div class="jumbotron p-4">
-                  <h4>단일 + 다중</h4>
-                  <p class="my-2">
-                    <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복
-                    <p>황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-                  </p>
-                  <p class="my-2">
-                    <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복
-                    <p>황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-                  </p>
-                  <p class="my-2">
-                    <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복
-                    <p>황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상</p>
-                  </p>
+                <div class="jumbotron jumbotron-score p-4">
+                  <h3>단일+다중</h3>
+                  <span>updated : 2019-01-01 01:01</span>
+                  <div class="py-2">
+                    <h5>1</h5>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상
+                    </p>
+                    <span>점수 : 1512</span>
+                  </div>
+                  <div class="py-2">
+                    <h5>2</h5>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <span>점수 : 1511</span>
+                  </div>
+                  <div class="py-2">
+                    <h5>3</h5>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상
+                    </p>
+                    <p class="my-1">
+                      <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
+                      황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
+                    </p>
+                    <span>점수 : 1510</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -145,6 +241,7 @@
           </div>
         </div>
       </main>
+    </div>
 
     <!-- Modal -->
     <div id="man-modal"></div>
@@ -168,13 +265,71 @@
           }
         }
       }
-      
+
+      function renderUserItem(items) {
+        // TODO: should clear item area ////
+        // for (var i in items) {
+        //   console.log(i)
+        // }
+      }
+
+      function renderUserItemById(class_id, sp_id) {
+        renderUserItem(sessionStorage.getItem("azblr-items-"+class_id+"-"+sp_id))
+      }
+
       $(document).ready(function() {
-        // main
         var class_id = GetURLParameter('class_id')
         var sp_id = GetURLParameter('sp_id')
-        console.log(class_id)
-        console.log(sp_id)
+        
+        // init
+        // TODO: the item inputs (text, button) should be blocked here /////
+        var tk = sessionStorage.getItem("azblr-tk")
+        var _headers = {}
+        _headers['Authorization'] = tk
+        var items = sessionStorage.getItem("azblr-items-"+class_id+"-"+sp_id)
+        if (items != null) {
+          renderUserItem(items)
+        } else if (tk != null) {
+          $.ajax({
+            url: 'http://localhost:5000/api/user/class/'+class_id+"/specialization/"+sp_id,
+            type: 'get',
+            headers: _headers,
+            async: false,
+            success:function(data) {
+              if (data != null) {
+                items = []
+                for (var i in data['item_ids']) {
+                  // TODO: get the detailed item info
+                  $.ajax({
+                    url: 'http://localhost:5000/api/item/'+data['item_ids'][i]+"/class/"+class_id,
+                    type: 'get',
+                    async: false,
+                    success: function(data) {
+                      console.log(data)
+                      items.push(data)
+                    },
+                    error:function(data) {
+                      alert(data.responseJSON.message)
+                    }
+                  })
+                }
+                sessionStorage.setItem("azblr-items-"+class_id+"-"+sp_id, items)
+                renderUserItem(items)
+              }
+            },
+            error:function(data) {
+              alert(data.responseJSON.message)
+            }
+          })
+        }
+        // TODO: the item input should be released here ////
+
+        // add item
+        $('#add-button').click(function() {
+          // TODO: the item inputs (text, button) should be blocked here /////
+          $('#input-item-id')
+          // TODO: the item input should be released here (end of this function) ////
+        })
       })
     </script>
   </body>
