@@ -1,5 +1,6 @@
 from app.main import db
 from app.main.service.meta_service import get_fight_styles
+from app.main.service.item_info_service import get_spell_info
 from itertools import product
 
 def score(data):
@@ -104,8 +105,28 @@ def score(data):
         item_set["score"][3] = sum(item_set["score"].values())
         scored_items.append(item_set)
 
+    ## sorting
     ret["score_order"]["1"] = sorted(scored_items, key=lambda i: i["score"][1], reverse=True)[:3]
     ret["score_order"]["2"] = sorted(scored_items, key=lambda i: i["score"][2], reverse=True)[:3]
     ret["score_order"]["1+2"] = sorted(scored_items, key=lambda i: i["score"][3], reverse=True)[:3]
+
+    ## get subspell name
+    sub_spells = {}
+    for f in ret["score_order"]:
+        for s in ret["score_order"][f]:
+            for i in s["items"]:
+                for p in i["selectedPower"]:
+                    sub_spells_ko = ""
+                    if p["subSpellId"] is not None:
+                        for n in p["subSpellId"].split("+"):
+                            if n != "":
+                                if n in sub_spells:
+                                    sub_spells_ko += "+"+sub_spells[n]
+                                else:
+                                    ko = get_spell_info(n)['name']
+                                    sub_spells_ko += "+"+ko
+                                    sub_spells[n] = ko
+                    p["subSpellNameKor"] = sub_spells_ko
+
 
     return ret
