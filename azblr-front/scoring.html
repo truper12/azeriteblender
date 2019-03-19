@@ -26,35 +26,32 @@
       </header>
     
       <main role="main" class="inner cover">
+        <p class="h2" id="p-csp-header"></p>
         <!-- add item form -->
         <form class="form-inline pb-4">
           <label class="sr-only" for="input-item-id">Item ID</label>
           <input type="text" class="form-control form-control-sm" id="input-item-id" placeholder="Item ID">
-          <button type="button" class="btn btn-secondary btn-sm ml-1" id="add-button">추가</button>
+          <div class="div-button-normal"><button type="button" class="btn btn-secondary btn-sm ml-1" id="add-button">추가</button></div>
+          <div class="div-button-loading d-none"><button type="button" class="btn btn-secondary btn-sm ml-1" disabled><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button></div>
         </form>
 
         <!-- added items -->
         <div class="jumbotron jumbotron-item p-4">
           <h5>머리</h5>
-          <!-- <div id="item-1">
-            <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
-            <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
-          </div> -->
+          <div id="item-1-none"><p><small>아직 등록된 장비가 없습니다.</small></p></div>
+          <div id="item-1"></div>
           <hr class="my-4">
           <h5>어깨</h5>
-          <!-- <div id="item-3">
-            <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
-            <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
-          </div> -->
+          <div id="item-3-none"><p><small>아직 등록된 장비가 없습니다.</small></p></div>
+          <div id="item-3"></div>
           <hr class="my-4">
           <h5>가슴</h5>
-          <!-- <div id="item-5">
-            <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
-            <p class="my-2"><img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <a href="#" class="btn btn-sm p-0"><i class="fas fa-times"></i></a></p>
-          </div> -->
+          <div id="item-5-none"><p><small>아직 등록된 장비가 없습니다.</small></p></div>
+          <div id="item-5"></div>
         </div>
         <div class="pb-5">
-          <button type="button" class="btn btn-primary">BLEND!</button>
+          <div class="div-button-normal"><button type="button" class="btn btn-primary">BLEND!</button></div>
+          <div class="div-button-loading d-none"><button type="button" class="btn btn-primary" disabled><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button></div>
         </div>
 
         <!-- result -->
@@ -253,6 +250,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/fontawesome.js" integrity="sha384-xl26xwG2NVtJDw2/96Lmg09++ZjrXPc89j0j7JHjLOdSwHDHPHiucUjfllW0Ywrq" crossorigin="anonymous"></script>
     <script src="/js/navbar.js"></script>
     <script>
+      var loadings = []
       function GetURLParameter(sParam) {
         var sPageURL = window.location.search.substring(1)
         var sPageURL = window.location.search.substring(1)
@@ -266,69 +264,205 @@
         }
       }
 
-      function renderUserItem(items) {
-        // TODO: should clear item area ////
-        // for (var i in items) {
-        //   console.log(i)
-        // }
+      function setButtonsLoading() {
+        if (!($('.div-button-normal').hasClass('d-none')) || $('.div-button-loading').hasClass('d-none')) {
+          $('.div-button-normal').addClass('d-none')
+          $('.div-button-loading').removeClass('d-none')
+        }
+        var _id = Math.floor(Math.random()*1000000+1)
+        while(true) {
+          if (!(_id in loadings)){
+            loadings.push(_id)
+            break
+          }
+          _id = Math.floor(Math.random()*1000000+1)
+        }
+        return _id
       }
 
-      function renderUserItemById(class_id, sp_id) {
-        renderUserItem(sessionStorage.getItem("azblr-items-"+class_id+"-"+sp_id))
+      function setButtonsNormal(_id) {
+        loadings = loadings.filter(i => i != _id)
+
+        if (loadings.length == 0) {
+          $('.div-button-loading').addClass('d-none')
+          $('.div-button-normal').removeClass('d-none')
+        }
+      }
+
+      function renderUserItems(items) {
+        for (var i in items) {
+          renderUserItem(items[i])
+        }
+      }
+
+      function saveUserItems(tk, items, class_id, specialization_id) {
+        var _headers = {}
+        _headers['Authorization'] = tk
+        var req_data = {
+          'class_id': class_id,
+          'specialization_id': specialization_id,
+          'item_ids': items.map(i => i['id'])
+        }
+        var l_id = setButtonsLoading()
+        $.ajax({
+          url: 'http://localhost:5000/api/user/class',
+          type: 'put',
+          headers: _headers,
+          data: JSON.stringify(req_data),
+          contentType: 'application/json',
+          error: function(data) {
+            alert(data.responseJSON.message)
+          },
+          complete: function() {
+            setButtonsNormal(l_id)
+          }
+        })
+      }
+
+      function renderUserItem(item) {
+        var slotTo = item['slotTo']
+        var divSlot = $('#item-'+slotTo)
+        var _i = $('<i/>', {
+          class: 'fas fa-times'
+        })
+        var _a = $('<a/>', {
+          class: 'btn btn-sm p-0 button-remove-item',
+          href: '#',
+          id: 'item-'+item['id']
+        })
+        var _img = $('<img/>', {
+          class: "rounded",
+          src: "https://wow.zamimg.com/images/wow/icons/small/"+item['icon']+'.jpg'
+        })
+        var _span = $('<span/>', {
+          text: " "+item['name']+" "
+        })
+        var _p = $('<p/>', {
+          class: "my-2"
+        })
+
+        _a.append(_i)
+        _p.append(_img)
+        _p.append(_span)
+        _p.append(_a)
+        divSlot.append(_p)
+        
+        _a.click(function() {
+          // remove
+          var itemId = $(this).attr('id').split('-')[1]
+          var divSlot = $(this).parent().parent()
+          $(this).parent().remove()
+          if (divSlot.children().length == 0) {
+            $('#item-'+slotTo+'-none').removeClass('d-none')
+          }
+          // sessionStorage
+          var class_id = GetURLParameter('c_id')
+          var specialization_id = GetURLParameter('sp_id')
+          var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+          var items = JSON.parse(sessionStorage.getItem(storage_key)).filter(function(item) {
+            return item.id != itemId
+          })
+          sessionStorage.setItem(storage_key, JSON.stringify(items))
+
+          // put user class
+          var tk = sessionStorage.getItem("azblr-tk")
+          if (tk != null) {
+            saveUserItems(tk, items, class_id, specialization_id)
+          }
+        })
+
+        // remove defualt div
+        var _none = $('#item-'+slotTo+'-none')
+        if (!_none.hasClass('d-none')) _none.addClass('d-none')
+      }
+
+      function getItemInfoRenderStore(item_id, class_id, specialization_id) {
+        var l_id = setButtonsLoading()
+        $.ajax({
+          url: 'http://localhost:5000/api/item/'+item_id+"/class/"+class_id,
+          type: 'get',
+          success: function(data) {
+            renderUserItem(data)
+            var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+            var items_str = sessionStorage.getItem(storage_key)
+            if (items_str == null) {
+              sessionStorage.setItem(storage_key, JSON.stringify([data,]))
+            } else {
+              var items = JSON.parse(items_str)
+              items.push(data)
+              sessionStorage.setItem(storage_key, JSON.stringify(items))
+            }
+          },
+          error: function(data) {
+            alert(data.responseJSON.message)
+          },
+          complete: function() {
+            setButtonsNormal(l_id)
+          }
+        })
       }
 
       $(document).ready(function() {
-        var class_id = GetURLParameter('class_id')
+        var class_id = GetURLParameter('c_id')
         var sp_id = GetURLParameter('sp_id')
-        
+        var class_sp_name = decodeURIComponent(GetURLParameter('csp_name'))
+        var class_color = decodeURIComponent(GetURLParameter('c_color'))
+
+        var storage_key = "azblr-items-"+class_id+"-"+sp_id
+
+        $('#p-csp-header').text(class_sp_name)
+        $('#p-csp-header').css("color", class_color)
+
         // init
-        // TODO: the item inputs (text, button) should be blocked here /////
         var tk = sessionStorage.getItem("azblr-tk")
         var _headers = {}
         _headers['Authorization'] = tk
-        var items = sessionStorage.getItem("azblr-items-"+class_id+"-"+sp_id)
+        var items = sessionStorage.getItem(storage_key)
         if (items != null) {
-          renderUserItem(items)
+          renderUserItems(JSON.parse(items))
         } else if (tk != null) {
+          var l_id = setButtonsLoading()
           $.ajax({
             url: 'http://localhost:5000/api/user/class/'+class_id+"/specialization/"+sp_id,
             type: 'get',
             headers: _headers,
-            async: false,
             success:function(data) {
               if (data != null) {
-                items = []
                 for (var i in data['item_ids']) {
-                  // TODO: get the detailed item info
-                  $.ajax({
-                    url: 'http://localhost:5000/api/item/'+data['item_ids'][i]+"/class/"+class_id,
-                    type: 'get',
-                    async: false,
-                    success: function(data) {
-                      console.log(data)
-                      items.push(data)
-                    },
-                    error:function(data) {
-                      alert(data.responseJSON.message)
-                    }
-                  })
+                  getItemInfoRenderStore(data['item_ids'][i], class_id, sp_id)
                 }
-                sessionStorage.setItem("azblr-items-"+class_id+"-"+sp_id, items)
-                renderUserItem(items)
               }
             },
             error:function(data) {
               alert(data.responseJSON.message)
+            },
+            complete: function() {
+              setButtonsNormal(l_id)
             }
-          })
+          })  
         }
-        // TODO: the item input should be released here ////
 
         // add item
         $('#add-button').click(function() {
-          // TODO: the item inputs (text, button) should be blocked here /////
-          $('#input-item-id')
-          // TODO: the item input should be released here (end of this function) ////
+          // check duplicate item id
+          var item_id = $('#input-item-id').val()
+          var class_id = GetURLParameter('c_id')
+          var specialization_id = GetURLParameter('sp_id')
+          var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+          var items = JSON.parse(sessionStorage.getItem(storage_key))
+          if (items.filter(i =>  i['id'] == item_id).length > 0) {
+            alert("이미 추가된 장비입니다")
+            return
+          }
+
+          // append
+          getItemInfoRenderStore(item_id, class_id, specialization_id)
+
+          var tk = sessionStorage.getItem("azblr-tk")
+          if (tk != null) {
+            saveUserItems(tk, items, class_id, specialization_id)
+          }
+          $('#input-item-id').val('')
         })
       })
     </script>

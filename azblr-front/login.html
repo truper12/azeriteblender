@@ -41,6 +41,7 @@
               data: JSON.stringify({'login_id':$('#inputID').val(), 'password': $('#inputPassword').val()}),
               contentType: 'application/json',
               success:function(data) {
+                sessionStorage.clear()
                 sessionStorage.setItem("azblr-tk", data['Authorization'])
                 window.location.href = "/";
               },

@@ -61,8 +61,8 @@
                 css: {
                   color: data[class_id]["color"]
                 }
-              }
-              )
+              })
+              
               $('<thead/>').append($('<tr/>').append($('<th/>', {
                 colspan: Object.keys(sps).length,
                 text: data[class_id]["name"]
@@ -72,7 +72,7 @@
               var _tr = $('<tr/>')
               for(var sp_id in sps) {
                 $('<td/>').append($('<a/>', {
-                  href: "/scoring.html?class_id="+class_id+"&sp_id="+sp_id,
+                  href: "/scoring.html?c_id="+class_id+"&sp_id="+sp_id+"&csp_name="+encodeURIComponent(data[class_id]["name"]+" ("+sps[sp_id]['name']+")")+"&c_color="+encodeURIComponent(data[class_id]["color"]),
                   text: sps[sp_id]['name'],
                   css: {
                     color: data[class_id]["color"]

@@ -11,12 +11,10 @@ $(document).ready(function() {
             $.ajax({
                 url: 'http://localhost:5000/api/auth/logout',
                 type: 'post',
-                headers: _headers,
-                success: function(data) {
-                    sessionStorage.clear()
-                    location.reload()
-            }
+                headers: _headers
             })
+            sessionStorage.clear()
+            location.reload()
         })
     }
     $(document).ready(function(){
