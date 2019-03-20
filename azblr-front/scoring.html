@@ -28,12 +28,12 @@
       <main role="main" class="inner cover">
         <p class="h2" id="p-csp-header"></p>
         <!-- add item form -->
-        <form class="form-inline pb-4">
-          <label class="sr-only" for="input-item-id">Item ID</label>
-          <input type="text" class="form-control form-control-sm" id="input-item-id" placeholder="Item ID">
+        <div class="form-inline pb-4">
+          <label class="sr-only" for="input-item-name">장비 이름</label>
+          <input type="text" class="form-control form-control-sm" id="input-item-name" placeholder="장비 이름">
           <div class="div-button-normal"><button type="button" class="btn btn-secondary btn-sm ml-1" id="add-button">추가</button></div>
           <div class="div-button-loading d-none"><button type="button" class="btn btn-secondary btn-sm ml-1" disabled><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button></div>
-        </form>
+        </div>
 
         <!-- added items -->
         <div class="jumbotron jumbotron-item p-4">
@@ -50,18 +50,18 @@
           <div id="item-5"></div>
         </div>
         <div class="pb-5">
-          <div class="div-button-normal"><button type="button" class="btn btn-primary">BLEND!</button></div>
+          <div class="div-button-normal"><button type="button" class="btn btn-primary" id="blend-button">BLEND!</button></div>
           <div class="div-button-loading d-none"><button type="button" class="btn btn-primary" disabled><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button></div>
         </div>
 
         <!-- result -->
         <div id="result-area" class="d-none">
           <h2>Result</h3>
-          <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
+          <div id="carouselIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
             <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+              <li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselIndicators" data-slide-to="1"></li>
+              <li data-target="#carouselIndicators" data-slide-to="2"></li>
             </ol>
             <div class="carousel-inner">
               <div class="carousel-item active">
@@ -227,11 +227,11 @@
                 </div>
               </div>
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="sr-only">Next</span>
             </a>
@@ -295,7 +295,9 @@
         }
       }
 
-      function saveUserItems(tk, items, class_id, specialization_id) {
+      function saveUserItems(tk, class_id, specialization_id) {
+        var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+        var items = JSON.parse(sessionStorage.getItem(storage_key))
         var _headers = {}
         _headers['Authorization'] = tk
         var req_data = {
@@ -367,7 +369,7 @@
           // put user class
           var tk = sessionStorage.getItem("azblr-tk")
           if (tk != null) {
-            saveUserItems(tk, items, class_id, specialization_id)
+            saveUserItems(tk, class_id, specialization_id)
           }
         })
 
@@ -376,10 +378,17 @@
         if (!_none.hasClass('d-none')) _none.addClass('d-none')
       }
 
-      function getItemInfoRenderStore(item_id, class_id, specialization_id) {
+      function getItemInfoRenderStore(item_id, item_name, class_id, specialization_id, is_save) {
+        var _url = ''
+        if (item_id != null) {
+          _url = 'http://localhost:5000/api/item/'+item_id+"/class/"+class_id
+        } else if (item_name != null) {
+          _url = 'http://localhost:5000/api/item/name/'+item_name+"/class/"+class_id
+        }
+
         var l_id = setButtonsLoading()
         $.ajax({
-          url: 'http://localhost:5000/api/item/'+item_id+"/class/"+class_id,
+          url: _url,
           type: 'get',
           success: function(data) {
             renderUserItem(data)
@@ -391,6 +400,13 @@
               var items = JSON.parse(items_str)
               items.push(data)
               sessionStorage.setItem(storage_key, JSON.stringify(items))
+            }
+
+            if (is_save) {
+              var tk = sessionStorage.getItem("azblr-tk")
+              if (tk != null) {
+                saveUserItems(tk, class_id, specialization_id)
+              }
             }
           },
           error: function(data) {
@@ -429,7 +445,7 @@
             success:function(data) {
               if (data != null) {
                 for (var i in data['item_ids']) {
-                  getItemInfoRenderStore(data['item_ids'][i], class_id, sp_id)
+                  getItemInfoRenderStore(data['item_ids'][i], null, class_id, sp_id, false)
                 }
               }
             },
@@ -444,25 +460,49 @@
 
         // add item
         $('#add-button').click(function() {
-          // check duplicate item id
-          var item_id = $('#input-item-id').val()
+          // check duplicate item
+          var item_name = $('#input-item-name').val()
           var class_id = GetURLParameter('c_id')
           var specialization_id = GetURLParameter('sp_id')
           var storage_key = "azblr-items-"+class_id+"-"+specialization_id
           var items = JSON.parse(sessionStorage.getItem(storage_key))
-          if (items.filter(i =>  i['id'] == item_id).length > 0) {
+          if (items != null && items.filter(i =>  i['name'] == item_name).length > 0) {
             alert("이미 추가된 장비입니다")
             return
           }
 
           // append
-          getItemInfoRenderStore(item_id, class_id, specialization_id)
+          getItemInfoRenderStore(null, item_name, class_id, specialization_id, true)
 
-          var tk = sessionStorage.getItem("azblr-tk")
-          if (tk != null) {
-            saveUserItems(tk, items, class_id, specialization_id)
+          $('#input-item-name').val('')
+        })
+
+        // blend
+        $('#blend-button').click(function() {
+          var class_id = GetURLParameter('c_id')
+          var specialization_id = GetURLParameter('sp_id')
+          var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+          var items = JSON.parse(sessionStorage.getItem(storage_key))
+          var req_data = {
+            'class_id': class_id,
+            'specialization_id': specialization_id,
+            'items': items
           }
-          $('#input-item-id').val('')
+
+          var l_id = setButtonsLoading()
+          $.ajax({
+            url: 'http://localhost:5000/api/score',
+            type: 'post',
+            data: JSON.stringify(req_data),
+            contentType: 'application/json',
+            success: function(data) {
+              console.log(data)
+              // $('#result-area').removeClass('d-none')
+            },
+            complete: function() {
+              setButtonsNormal(l_id)
+            }
+          })
         })
       })
     </script>
