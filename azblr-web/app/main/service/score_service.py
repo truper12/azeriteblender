@@ -41,6 +41,7 @@ def score(data):
                 "name": item['name'],
                 "slotTo": item['slotTo'],
                 "inventoryName": item['inventoryName'],
+                "icon": item['icon'],
                 "selectedPower": power_comb
             }
             if item['slotTo'] in selected_items:
@@ -108,7 +109,7 @@ def score(data):
     ## sorting
     ret["score_order"]["1"] = sorted(scored_items, key=lambda i: i["score"][1], reverse=True)[:3]
     ret["score_order"]["2"] = sorted(scored_items, key=lambda i: i["score"][2], reverse=True)[:3]
-    ret["score_order"]["1+2"] = sorted(scored_items, key=lambda i: i["score"][3], reverse=True)[:3]
+    ret["score_order"]["3"] = sorted(scored_items, key=lambda i: i["score"][3], reverse=True)[:3]
 
     ## get subspell name
     sub_spells = {}
