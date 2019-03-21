@@ -42,7 +42,7 @@ def get_item_info_with_spell_by_name(item_name, class_id):
     inventory = get_inventory_types()
     try:
         try:
-            r = requests.get('https://ko.wowhead.com/search?q=%s' % item_name, allow_redirects=False, timeout=5)
+            r = requests.get('https://ko.wowhead.com/search?q=%s' % item_name, allow_redirects=False, timeout=10)
         except requests.exceptions.Timeout:
             response_object = {
                 'status': 'fail',
