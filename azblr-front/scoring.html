@@ -239,43 +239,71 @@
       }
 
       function getItemInfoRenderStore(item_id, item_name, class_id, specialization_id, is_save) {
-        var _url = ''
-        if (item_id != null) {
-          _url = API_HOST+'/api/item/'+item_id+"/class/"+class_id
-        } else if (item_name != null) {
-          _url = API_HOST+'/api/item/name/'+item_name+"/class/"+class_id
-        }
-
         var l_id = setButtonsLoading()
-        $.ajax({
-          url: _url,
-          type: 'get',
-          success: function(data) {
-            renderUserItem(data)
-            var storage_key = "azblr-items-"+class_id+"-"+specialization_id
-            var items_str = sessionStorage.getItem(storage_key)
-            if (items_str == null) {
-              sessionStorage.setItem(storage_key, JSON.stringify([data,]))
-            } else {
-              var items = JSON.parse(items_str)
-              items.push(data)
-              sessionStorage.setItem(storage_key, JSON.stringify(items))
-            }
-
-            if (is_save) {
-              var tk = sessionStorage.getItem("azblr-tk")
-              if (tk != null) {
-                saveUserItems(tk, class_id, specialization_id)
+        if (item_id != null) {
+          $.ajax({
+            url: API_HOST+'/api/item/'+item_id+"/class/"+class_id,
+            type: 'get',
+            success: function(data) {
+              renderUserItem(data)
+              var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+              var items_str = sessionStorage.getItem(storage_key)
+              if (items_str == null) {
+                sessionStorage.setItem(storage_key, JSON.stringify([data,]))
+              } else {
+                var items = JSON.parse(items_str)
+                items.push(data)
+                sessionStorage.setItem(storage_key, JSON.stringify(items))
               }
+
+              if (is_save) {
+                var tk = sessionStorage.getItem("azblr-tk")
+                if (tk != null) {
+                  saveUserItems(tk, class_id, specialization_id)
+                }
+              }
+            },
+            error: function(data) {
+              alert(data.responseJSON.message)
+            },
+            complete: function() {
+              setButtonsNormal(l_id)
             }
-          },
-          error: function(data) {
-            alert(data.responseJSON.message)
-          },
-          complete: function() {
-            setButtonsNormal(l_id)
-          }
-        })
+          })
+        } else if (item_name != null) {
+          var req_data = {"item_name": item_name}
+          $.ajax({
+            url: API_HOST+'/api/item/class/'+class_id,
+            type: 'post',
+            data: JSON.stringify(req_data),
+            contentType: 'application/json',
+            success: function(data) {
+              renderUserItem(data)
+              var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+              var items_str = sessionStorage.getItem(storage_key)
+              if (items_str == null) {
+                sessionStorage.setItem(storage_key, JSON.stringify([data,]))
+              } else {
+                var items = JSON.parse(items_str)
+                items.push(data)
+                sessionStorage.setItem(storage_key, JSON.stringify(items))
+              }
+
+              if (is_save) {
+                var tk = sessionStorage.getItem("azblr-tk")
+                if (tk != null) {
+                  saveUserItems(tk, class_id, specialization_id)
+                }
+              }
+            },
+            error: function(data) {
+              alert(data.responseJSON.message)
+            },
+            complete: function() {
+              setButtonsNormal(l_id)
+            }
+          })
+        }
       }
 
       $(document).ready(function() {
