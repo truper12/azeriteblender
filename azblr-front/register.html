@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/bootstrap/css/signin.css">
-    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./bootstrap/css/signin.css">
+    <link rel="shortcut icon" href="./img/favicon.ico">
 
     <title>AzeriteBlender</title>
   </head>
@@ -25,10 +25,10 @@
         </form>
 
     <!-- Optional JavaScript -->
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./js/jquery-3.3.1.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
     <!-- AZBLR JavaScript -->
-    <script src="/js/apihost.js"></script>
+    <script src="./apihost.js"></script>
     <script>
       $(document).ready(function() {
         $('#submit-button').click(function() {
@@ -46,7 +46,7 @@
               contentType: 'application/json',
               success:function(data) {
                 sessionStorage.setItem("azblr-tk", data['Authorization'])
-                window.location.href = "/";
+                window.location.href = "./";
               },
               error: function(data) {
                 if (data.status == 409) {

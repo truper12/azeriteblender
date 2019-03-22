@@ -18,6 +18,6 @@ $(document).ready(function() {
         })
     }
     $(document).ready(function(){
-        $("#man-modal").load("/man-modal.html")       
+        $("#man-modal").load("./man-modal.html")       
     });
 })

@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/bootstrap/css/signin.css">
-    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./bootstrap/css/signin.css">
+    <link rel="shortcut icon" href="./img/favicon.ico">
 
     <title>AzeriteBlender</title>
   </head>
@@ -20,14 +20,14 @@
           <label for="inputPassword" class="sr-only">패스워드</label>
           <input type="password" id="inputPassword" class="form-control" placeholder="패스워드" required>
           <button class="btn btn-lg btn-primary btn-block" type="button" id="submit-button">로그인</button>
-          <a class="btn btn-md btn-link btn-block" href="/register.html" id="register-button">회원가입</a>
+          <a class="btn btn-md btn-link btn-block" href="./register.html" id="register-button">회원가입</a>
         </form>
 
     <!-- Optional JavaScript -->
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./js/jquery-3.3.1.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
     <!-- AZBLR JavaScript -->
-    <script src="/js/apihost.js"></script>
+    <script src="./apihost.js"></script>
     <script>
       $(document).ready(function() {
         $('#submit-button').click(function() {
@@ -44,7 +44,7 @@
               success:function(data) {
                 sessionStorage.clear()
                 sessionStorage.setItem("azblr-tk", data['Authorization'])
-                window.location.href = "/";
+                window.location.href = "./";
               },
               error:function(data) {
                 alert(data.responseJSON.message)
