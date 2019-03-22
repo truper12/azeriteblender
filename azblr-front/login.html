@@ -27,6 +27,7 @@
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <!-- AZBLR JavaScript -->
+    <script src="/js/apihost.js"></script>
     <script>
       $(document).ready(function() {
         $('#submit-button').click(function() {
@@ -36,7 +37,7 @@
             alert("패스워드를 입력해주세요")
           } else {
             $.ajax({
-              url: 'http://localhost:5000/api/auth/login',
+              url: API_HOST+'/api/auth/login',
               type: 'post',
               data: JSON.stringify({'login_id':$('#inputID').val(), 'password': $('#inputPassword').val()}),
               contentType: 'application/json',

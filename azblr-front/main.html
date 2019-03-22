@@ -45,12 +45,15 @@
     <!-- Optional JavaScript -->
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- AZBLR JavaScript -->
+    <script src="/js/apihost.js"></script>
     <script src="/js/navbar.js"></script>
     <script>
       $(document).ready(function() {
         // class-specialization
         $.ajax({
-          url: "http://localhost:5000/api/meta/class",
+          url: API_HOST+"/api/meta/class",
           type: 'get',
           success: function(data) {
             for(var class_id in data) {

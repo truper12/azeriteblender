@@ -105,6 +105,9 @@
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/solid.js" integrity="sha384-6FXzJ8R8IC4v/SKPI8oOcRrUkJU8uvFK6YJ4eDY11bJQz4lRw5/wGthflEOX8hjL" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/fontawesome.js" integrity="sha384-xl26xwG2NVtJDw2/96Lmg09++ZjrXPc89j0j7JHjLOdSwHDHPHiucUjfllW0Ywrq" crossorigin="anonymous"></script>
+
+    <!-- AZBLR JavaScript -->
+    <script src="/js/apihost.js"></script>
     <script src="/js/navbar.js"></script>
     <script>
       var loadings = []
@@ -164,7 +167,7 @@
         }
         var l_id = setButtonsLoading()
         $.ajax({
-          url: 'http://localhost:5000/api/user/class',
+          url: API_HOST+'/api/user/class',
           type: 'put',
           headers: _headers,
           data: JSON.stringify(req_data),
@@ -238,9 +241,9 @@
       function getItemInfoRenderStore(item_id, item_name, class_id, specialization_id, is_save) {
         var _url = ''
         if (item_id != null) {
-          _url = 'http://localhost:5000/api/item/'+item_id+"/class/"+class_id
+          _url = API_HOST+'/api/item/'+item_id+"/class/"+class_id
         } else if (item_name != null) {
-          _url = 'http://localhost:5000/api/item/name/'+item_name+"/class/"+class_id
+          _url = API_HOST+'/api/item/name/'+item_name+"/class/"+class_id
         }
 
         var l_id = setButtonsLoading()
@@ -296,7 +299,7 @@
         } else if (tk != null) {
           var l_id = setButtonsLoading()
           $.ajax({
-            url: 'http://localhost:5000/api/user/class/'+class_id+"/specialization/"+sp_id,
+            url: API_HOST+'/api/user/class/'+class_id+"/specialization/"+sp_id,
             type: 'get',
             headers: _headers,
             success:function(data) {
@@ -348,7 +351,7 @@
 
           var l_id = setButtonsLoading()
           $.ajax({
-            url: 'http://localhost:5000/api/score',
+            url: API_HOST+'/api/score',
             type: 'post',
             data: JSON.stringify(req_data),
             contentType: 'application/json',
@@ -374,7 +377,7 @@
                     var item = comb['items'][k]
 
                     var _p = $('<p/>', {
-                      class: "my-1"
+                      class: "my-3"
                     })
                     var _img = $('<img/>', {
                       class: "rounded",
@@ -411,24 +414,6 @@
           })
         })
       })
-
-
-      // <div class="py-2">
-      //     <h5>1</h5>
-      //     <p class="my-1">
-      //       <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
-      //       황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
-      //     </p>
-      //     <p class="my-1">
-      //       <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
-      //       황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
-      //     </p>
-      //     <p class="my-1">
-      //       <img class="rounded" src="https://wow.zamimg.com/images/wow/icons/small/inv_chest_mail_zandalardungeon_c_01.jpg"> 타락한 사술사의 예복 <br>
-      //       황야의 생존자 / 압도적인 힘 / 강화된 아제라이트 / 발톱의 잔상 / 호호아줌마의 강렬한 어택 / 야이 젠장할 놈아
-      //     </p>
-      //     <span>점수 : 1512</span>
-      //   </div>
     </script>
   </body>
 </html>

@@ -9,7 +9,7 @@ $(document).ready(function() {
         $('#logout-button').removeClass('d-none')
         $('#logout-button').click(function() {
             $.ajax({
-                url: 'http://localhost:5000/api/auth/logout',
+                url: API_HOST+'/api/auth/logout',
                 type: 'post',
                 headers: _headers
             })
