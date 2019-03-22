@@ -46,7 +46,7 @@ def get_item_info_with_spell_by_name(item_name, class_id):
         except requests.exceptions.Timeout:
             response_object = {
                 'status': 'fail',
-                'message': 'Unable to get azerite item information'
+                'message': 'Unable to get item id by item name'
             }
             return response_object, 404    
         if ('location' in r.headers) and ('/item=' in r.headers['location']):

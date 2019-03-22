@@ -21,6 +21,9 @@ class AuthDto:
 
 class ItemDto:
     api = Namespace('item', description='item related operations')
+    item_name = api.model('item_name', {
+        'item_name': fields.String(require=True, description = 'item_name')
+    })
 
 class MetaDto:
     api = Namespace('meta', description='meta data related operations')
