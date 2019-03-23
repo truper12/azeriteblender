@@ -42,7 +42,7 @@ def score(data):
                 "slotTo": item['slotTo'],
                 "inventoryName": item['inventoryName'],
                 "icon": item['icon'],
-                "selectedPower": power_comb
+                "selectedPower": sorted(power_comb, key=lambda p: p["tier"], reverse=True)
             }
             if item['slotTo'] in selected_items:
                 selected_items[item['slotTo']].append(selected_item)
