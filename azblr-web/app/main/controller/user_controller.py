@@ -27,7 +27,7 @@ class UserClass(Resource):
     @api.response(200, 'User class, specialization, items successfully saved.')
     @api.doc('save class, specialization, items', parser=parser, body=_user_class)
     @token_required
-    def put(self, user_id):
+    def post(self, user_id):
         """Saves user's class, specialization, items"""
         return save_user_class(user_id, request.json)
 
