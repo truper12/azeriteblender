@@ -168,7 +168,7 @@
         var l_id = setButtonsLoading()
         $.ajax({
           url: API_HOST+'/api/user/class',
-          type: 'put',
+          type: 'post',
           headers: _headers,
           data: JSON.stringify(req_data),
           contentType: 'application/json',
