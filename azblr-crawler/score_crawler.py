@@ -89,6 +89,7 @@ def crawl():
 
 if __name__ == "__main__":
     sched.start()
-    job = sched.add_job(crawl, 'cron', second='0', minute='37', hour='14') # crawling data every 1:00 AM
+    job = sched.add_job(crawl, 'cron', second='0', minute='0', hour='1') # crawling data every 1:00 AM
+    job.func()
     while True:
         time.sleep(1)
