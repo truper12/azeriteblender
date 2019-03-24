@@ -4,3 +4,5 @@ class Config:
     DATABASE_DB = ''
     DATABASE_HOST = ''
     DATABASE_PORT = 3306
+
+    LOG_FILE = ''

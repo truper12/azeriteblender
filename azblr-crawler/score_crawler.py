@@ -13,7 +13,7 @@ logger = logging.getLogger("pbatch_logger")
 logger.setLevel(logging.INFO)
 log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] # %(message)s")
 
-file_log_handler = TimedRotatingFileHandler(filename="crawler.log", when="midnight", interval=1, encoding="utf-8")
+file_log_handler = TimedRotatingFileHandler(filename=Config.LOG_FILE, when="midnight", interval=1, encoding="utf-8")
 file_log_handler.setFormatter(log_formatter)
 logger.addHandler(file_log_handler)
 
