@@ -29,10 +29,26 @@
         <p class="h2" id="p-csp-header"></p>
         <!-- add item form -->
         <div class="form-inline pb-4">
-          <label class="sr-only" for="input-item-name">장비 이름</label>
-          <input type="text" class="form-control form-control-sm" id="input-item-name" placeholder="장비 이름">
-          <div class="div-button-normal"><button type="button" class="btn btn-secondary btn-sm ml-1" id="add-button">추가</button></div>
-          <div class="div-button-loading d-none"><button type="button" class="btn btn-secondary btn-sm ml-1" disabled><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button></div>
+          <div id="div-input-item-name">
+            <label class="sr-only" for="input-item-id">아이템 ID</label>
+            <input type="text" class="form-control form-control-sm" id="input-item-id" placeholder="아이템 ID">
+          </div>
+          <div id="div-input-item-id" class="d-none">
+            <label class="sr-only" for="input-item-name">아이템 이름</label>
+            <input type="text" class="form-control form-control-sm" id="input-item-name" placeholder="아이템 이름">
+          </div>
+          <div class="div-button-normal">
+            <button type="button" class="btn btn-secondary btn-sm ml-1" id="add-button">추가</button>
+          </div>
+          <div class="div-button-loading d-none">
+            <button type="button" class="btn btn-secondary btn-sm ml-1" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="pl-2 form-group form-check">
+            <input type="checkbox" class="form-check-input" id="checkbox-toggle-item-input">
+            <label class="form-check-label" for="checkbox-toggle-item-input">이름으로 검색</label>
+          </div>
         </div>
 
         <!-- added items -->
@@ -318,6 +334,13 @@
         $('#p-csp-header').css("color", class_color)
 
         // init
+        $('#checkbox-toggle-item-input').click(function() {
+          $('#input-item-id').val('')
+          $('#input-item-name').val('')
+          $('#div-input-item-name').toggleClass("d-none")
+          $('#div-input-item-id').toggleClass("d-none")
+        })
+
         var tk = sessionStorage.getItem("azblr-tk")
         var _headers = {}
         _headers['Authorization'] = tk
@@ -349,6 +372,7 @@
         // add item
         $('#add-button').click(function() {
           // check duplicate item
+          var item_id = $('#input-item-id').val()
           var item_name = $('#input-item-name').val()
           var class_id = GetURLParameter('c_id')
           var specialization_id = GetURLParameter('sp_id')
@@ -360,8 +384,17 @@
           }
 
           // append
-          getItemInfoRenderStore(null, item_name, class_id, specialization_id, true)
-
+          if (item_id == '' && item_name == '') {
+            return
+          } else if (item_id != '' && item_name == '') {
+            getItemInfoRenderStore(item_id, null, class_id, specialization_id, true)
+          } else if (item_id == '' && item_name != '') {
+            getItemInfoRenderStore(null, item_name, class_id, specialization_id, true)
+          } else {
+            alert("something wrong.. please try again")
+          }
+          
+          $('#input-item-id').val('')
           $('#input-item-name').val('')
         })
 
