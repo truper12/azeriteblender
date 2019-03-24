@@ -1,10 +1,32 @@
-from app.main import db
+from config import Config
+from apscheduler.schedulers.background import BackgroundScheduler
+from logging.handlers import TimedRotatingFileHandler
+import logging
+import mysql.connector
 import requests
 import datetime
+import time
+
+sched = BackgroundScheduler()
+
+logger = logging.getLogger("pbatch_logger")
+logger.setLevel(logging.INFO)
+log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] # %(message)s")
+
+file_log_handler = TimedRotatingFileHandler(filename="crawler.log", when="midnight", interval=1, encoding="utf-8")
+file_log_handler.setFormatter(log_formatter)
+logger.addHandler(file_log_handler)
 
 def crawl():
-    print("crawler started at %s " % datetime.datetime.now())
-    conn = db.connect()
+    logger.info("crawler started at %s " % datetime.datetime.now())
+    mysql_conn = {
+        'user': Config.DATABASE_USER,
+        'password': Config.DATABASE_PASSWORD,
+        'host': Config.DATABASE_HOST,
+        'port': Config.DATABASE_PORT,
+        'database': Config.DATABASE_DB
+    }
+    conn = mysql.connector.connect(**mysql_conn)
     cursor = conn.cursor()
 
     cursor.execute("select id, name_en from m_fight_style")
@@ -60,7 +82,13 @@ def crawl():
                 cursor.execute("update crawler set timestamp = %s where id = %s", (bm_json['timestamp'], crawler_id,))
                 conn.commit()
             except Exception as e:
-                print("error occurs during crawling %s %s %s, %s" % (class_name_en, sp_name_en, fight_style_name_en, e))
+                logger.info("error occurs during crawling %s %s %s, %s" % (class_name_en, sp_name_en, fight_style_name_en, e))
     cursor.close()
     conn.close()
-    print("crawler finished at %s " % datetime.datetime.now())
+    logger.info("crawler finished at %s " % datetime.datetime.now())
+
+if __name__ == "__main__":
+    sched.start()
+    job = sched.add_job(crawl, 'cron', second='0', minute='37', hour='14') # crawling data every 1:00 AM
+    while True:
+        time.sleep(1)

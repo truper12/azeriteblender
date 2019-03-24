@@ -11,7 +11,6 @@ python pakages:
     pyjwt
     requests
     apscheduler
-# flask-sqlalchemy
-# flask-restful
+    mysql-connector-python
 
 run: python3 manage.py run
