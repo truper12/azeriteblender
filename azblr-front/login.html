@@ -20,6 +20,9 @@
           <label for="inputPassword" class="sr-only">패스워드</label>
           <input type="password" id="inputPassword" class="form-control" placeholder="패스워드" required>
           <button class="btn btn-lg btn-primary btn-block" type="button" id="submit-button">로그인</button>
+          <button type="button" class="btn btn-lg btn-secondary btn-block d-none" id="submit-button-loading" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
           <a class="btn btn-md btn-link btn-block" href="./register.html" id="register-button">회원가입</a>
         </form>
 
@@ -36,6 +39,10 @@
           } else if ($('#inputPassword').val() == '') {
             alert("패스워드를 입력해주세요")
           } else {
+            if (!($('#submit-button').hasClass('d-none')) || $('#submit-button-loading').hasClass('d-none')) {
+              $('#submit-button').addClass('d-none')
+              $('#submit-button-loading').removeClass('d-none')
+            }
             $.ajax({
               url: API_HOST+'/api/auth/login',
               type: 'post',
@@ -48,6 +55,10 @@
               },
               error:function(data) {
                 alert(data.responseJSON.message)
+              },
+              complete: function(data) {
+                $('#submit-button-loading').addClass('d-none')
+                $('#submit-button').removeClass('d-none')
               }
             })
           } 
