@@ -5,6 +5,7 @@ $(document).ready(function() {
     _headers['Authorization'] = tk
     if (tk == null) {
         $('#login-button').removeClass('d-none')
+        $('#register-button').removeClass('d-none')
     } else {
         $('#logout-button').removeClass('d-none')
         $('#logout-button').click(function() {
