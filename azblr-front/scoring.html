@@ -84,20 +84,20 @@
                 <div class="jumbotron jumbotron-score p-4">
                   <h2 style="color: #5bc0de;"><b>단일 타겟 (patchwerk)</b></h2>
                   <div>updated : <span id="timestamp-1"></span></div>
-                  <div id="div-result-1"></div>
+                  <div id="div-result-1" class="div-result"></div>
                 </div>
               </div>
               <div class="carousel-item">
                 <div class="jumbotron jumbotron-score p-4">
                     <h2 style="color: #5bc0de;"><b>다중 타겟 (hecticaddcleave)</b></h2>
                   <div>updated : <span id="timestamp-2"></span></div>
-                  <div id="div-result-2"></div>
+                  <div id="div-result-2" class="div-result"></div>
                 </div>
               </div>
               <div class="carousel-item">
                 <div class="jumbotron jumbotron-score p-4">
                     <h2 style="color: #5bc0de;"><b>단일 타겟 + 다중 타겟</b></h2>
-                  <div id="div-result-3"></div>
+                  <div id="div-result-3" class="div-result"></div>
                 </div>
               </div>
             </div>
@@ -412,12 +412,16 @@
           }
 
           var l_id = setButtonsLoading()
+          if (!$('#result-area').hasClass('d-none'))
+            $('#result-area').addClass('d-none')
           $.ajax({
             url: API_HOST+'/api/score',
             type: 'post',
             data: JSON.stringify(req_data),
             contentType: 'application/json',
             success: function(data) {
+              $('.div-result').empty();
+
               for (var i in data['timestamps']) {
                 $('#timestamp-'+i).text(data['timestamps'][i])
               }
