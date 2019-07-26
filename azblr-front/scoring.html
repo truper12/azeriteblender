@@ -29,12 +29,8 @@
       <main role="main" class="inner cover">
         <p class="h2" id="p-csp-header"></p>
         <!-- add item form -->
-        <div class="form-inline pb-4">
+        <div id="div-item-name" class="form-inline">
           <div id="div-input-item-name">
-            <label class="sr-only" for="input-item-id">아이템 ID</label>
-            <input type="text" class="form-control form-control-sm" id="input-item-id" placeholder="아이템 ID">
-          </div>
-          <div id="div-input-item-id" class="d-none">
             <label class="sr-only" for="input-item-name">아이템 이름</label>
             <input type="text" class="form-control form-control-sm" id="input-item-name" placeholder="아이템 이름">
           </div>
@@ -46,10 +42,27 @@
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             </button>
           </div>
-          <div class="pl-2 form-group form-check">
-            <input type="checkbox" class="form-check-input" id="checkbox-toggle-item-input">
-            <label class="form-check-label" for="checkbox-toggle-item-input">이름으로 검색</label>
+        </div>
+        <div id="div-simc" class="d-none">
+          <div id="div-simc-textarea">
+            <textarea class="form-control form-control-sm col-md-10" id="textarea-simc" placeholder="Copy/Paste the text from the Simc addon (/simc Command)" rows=4></textarea>
           </div>
+          <ul class="list-unstyled" id="div-simc-ul"></ul>
+          <div id="div-simc-error" class="alert-text d-none">
+              <small>장비 정보를 불러올 수 없습니다. /simc 문자열을 복사-붙여넣기 해주세요.</small>
+          </div>
+          <div class="div-button-normal">
+            <button type="button" class="btn btn-secondary btn-sm mb-1 mt-1" id="add-simc-button">추가</button>
+          </div>
+          <div class="div-button-loading d-none">
+            <button type="button" class="btn btn-secondary btn-sm mb-1 mt-1" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+        <div class="pl-4 form-group form-check">
+          <input type="checkbox" class="form-check-input" id="checkbox-toggle-item-input">
+          <label class="form-check-label" for="checkbox-toggle-item-input">Simc 애드온에서 불러오기</label>
         </div>
 
         <!-- added items -->
@@ -146,6 +159,8 @@
           $('.div-button-normal').addClass('d-none')
           $('.div-button-loading').removeClass('d-none')
         }
+        $('#textarea-simc').prop("disabled", true)
+        $('#checkbox-toggle-item-input').prop('disabled', true)
         var _id = Math.floor(Math.random()*1000000+1)
         while(true) {
           if (!(_id in loadings)){
@@ -163,6 +178,8 @@
         if (loadings.length == 0) {
           $('.div-button-loading').addClass('d-none')
           $('.div-button-normal').removeClass('d-none')
+          $('#textarea-simc').prop("disabled", false)
+          $('#checkbox-toggle-item-input').prop('disabled', false)
         }
       }
 
@@ -248,11 +265,40 @@
           if (tk != null) {
             saveUserItems(tk, class_id, specialization_id)
           }
+
+          $('#textarea-simc').trigger('input')
         })
 
         // remove defualt div
         var _none = $('#item-'+slotTo+'-none')
         if (!_none.hasClass('d-none')) _none.addClass('d-none')
+      }
+
+      function renderSimcItem(item, is_duplicate) {
+        var footer = is_duplicate ? ' (이미 추가된 장비)' : ''
+        var _li = $('<li/>', {
+          class: 'mb-n1'
+        })
+        var _small = $('<small/>', {
+          text: item['name'] + footer,
+          class: is_duplicate ? 'strike-text' : 'ok-text'
+        })
+
+        _li.append(_small)
+        $('#div-simc-ul').append(_li)
+      }
+
+      function renderSimcErrorItem(item_id) {
+        var _li = $('<li/>', {
+          class: 'mb-n1'
+        })
+        var _small = $('<small/>', {
+          text: "Item ID:"+ item_id+" 는 해당 클래스의 아제라이트 장비가 아닙니다.",
+          class: 'strike-text'
+        })
+
+        _li.append(_small)
+        $('#div-simc-ul').append(_li)
       }
 
       function getItemInfoRenderStore(item_id, item_name, class_id, specialization_id, is_save) {
@@ -264,14 +310,7 @@
             success: function(data) {
               renderUserItem(data)
               var storage_key = "azblr-items-"+class_id+"-"+specialization_id
-              var items_str = sessionStorage.getItem(storage_key)
-              if (items_str == null) {
-                sessionStorage.setItem(storage_key, JSON.stringify([data,]))
-              } else {
-                var items = JSON.parse(items_str)
-                items.push(data)
-                sessionStorage.setItem(storage_key, JSON.stringify(items))
-              }
+              pushSessionStorageItem(storage_key, data)
 
               if (is_save) {
                 var tk = sessionStorage.getItem("azblr-tk")
@@ -297,14 +336,7 @@
             success: function(data) {
               renderUserItem(data)
               var storage_key = "azblr-items-"+class_id+"-"+specialization_id
-              var items_str = sessionStorage.getItem(storage_key)
-              if (items_str == null) {
-                sessionStorage.setItem(storage_key, JSON.stringify([data,]))
-              } else {
-                var items = JSON.parse(items_str)
-                items.push(data)
-                sessionStorage.setItem(storage_key, JSON.stringify(items))
-              }
+              pushSessionStorageItem(storage_key, data)
 
               if (is_save) {
                 var tk = sessionStorage.getItem("azblr-tk")
@@ -323,6 +355,74 @@
         }
       }
 
+      function getItemInfoSimcRenderStoreTemp(item_id, class_id, specialization_id) {
+        var l_id = setButtonsLoading()
+
+        var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+        var items = JSON.parse(sessionStorage.getItem(storage_key))
+        var prev_items = JSON.parse(sessionStorage.getItem("azblr-items-simc-temp"))
+        if (items != null && items.filter(i =>  i['id'] == item_id).length > 0) {
+          var item = items.filter(i =>  i['id'] == item_id)[0]
+          renderSimcItem(item, true)
+          pushSessionStorageItem("azblr-items-simc", item)
+          setButtonsNormal(l_id)
+          return;
+        } else if (prev_items != null && prev_items.filter(i =>  i['id'] == item_id).length > 0){
+          var item = prev_items.filter(i =>  i['id'] == item_id)[0]
+          renderSimcItem(item, false)
+          pushSessionStorageItem("azblr-items-simc", item)
+          setButtonsNormal(l_id)
+          return;
+        } else {
+          $.ajax({
+            url: API_HOST+'/api/item/'+item_id+"/class/"+class_id,
+            type: 'get',
+            success: function(data) {
+              renderSimcItem(data, false)
+              pushSessionStorageItem("azblr-items-simc", data)
+            },
+            error: function(data) {
+              //alert(data.responseJSON.message)
+              renderSimcErrorItem(item_id)
+            },
+            complete: function() {
+              setButtonsNormal(l_id)
+            }
+          })
+        }
+      }
+
+      function pushSessionStorageItem(storage_key, item) {
+        var items_str = sessionStorage.getItem(storage_key)
+        if (items_str == null) {
+          sessionStorage.setItem(storage_key, JSON.stringify([item,]))
+        } else {
+          var items = JSON.parse(items_str)
+          items.push(item)
+          sessionStorage.setItem(storage_key, JSON.stringify(items))
+        }
+      }
+
+      function getItemIdsFromSimcTextarea() {
+        var l_id = setButtonsLoading()
+        var items = []
+        var text_lines = $('#textarea-simc').val().split('\n');
+        for(var i=0; i < text_lines.length;i++) {
+          var text = text_lines[i]
+          if (text.includes("azerite_powers=")) {
+            var s = text.split(',')
+            for(var j=0; j<s.length;j++) {
+              var v = s[j].split('=')
+              if (v[0] == 'id') {
+                items.push(v[1])
+              }
+            }
+          }
+        }
+        setButtonsNormal(l_id)
+        return items;
+      }
+
       $(document).ready(function() {
         var class_id = GetURLParameter('c_id')
         var sp_id = GetURLParameter('sp_id')
@@ -335,13 +435,6 @@
         $('#p-csp-header').css("color", class_color)
 
         // init
-        $('#checkbox-toggle-item-input').click(function() {
-          $('#input-item-id').val('')
-          $('#input-item-name').val('')
-          $('#div-input-item-name').toggleClass("d-none")
-          $('#div-input-item-id').toggleClass("d-none")
-        })
-
         var tk = sessionStorage.getItem("azblr-tk")
         var _headers = {}
         _headers['Authorization'] = tk
@@ -370,10 +463,39 @@
           })  
         }
 
+        // checkbox
+        $('#checkbox-toggle-item-input').click(function() {
+          $('#input-item-name').val('')
+          $('#textarea-simc').val('')
+          sessionStorage.removeItem("azblr-items-simc")
+          $('#div-simc-ul').empty()
+          $('#div-item-name').toggleClass("d-none")
+          $('#div-simc').toggleClass("d-none")
+        })
+
+        // simc parsing
+        $('#textarea-simc').on('input', function() {
+          $('#div-simc-error').addClass('d-none')
+          $('#div-simc-ul').empty()
+          sessionStorage.setItem("azblr-items-simc-temp", sessionStorage.getItem("azblr-items-simc"))
+          sessionStorage.removeItem("azblr-items-simc")
+
+          var item_ids = getItemIdsFromSimcTextarea();
+          for (var i=0; i<item_ids.length;i++) {
+            var item_id = item_ids[i]
+            getItemInfoSimcRenderStoreTemp(item_id, class_id, sp_id)
+          }
+
+          if ($('#textarea-simc').val() != '' && item_ids.length == 0) {
+            $('#div-simc-error').removeClass('d-none')
+          }
+
+          sessionStorage.removeItem("azblr-items-simc-temp")
+        })
+
         // add item
         $('#add-button').click(function() {
           // check duplicate item
-          var item_id = $('#input-item-id').val()
           var item_name = $('#input-item-name').val()
           var class_id = GetURLParameter('c_id')
           var specialization_id = GetURLParameter('sp_id')
@@ -385,18 +507,42 @@
           }
 
           // append
-          if (item_id == '' && item_name == '') {
+          if (item_name == '') {
             return
-          } else if (item_id != '' && item_name == '') {
-            getItemInfoRenderStore(item_id, null, class_id, specialization_id, true)
-          } else if (item_id == '' && item_name != '') {
-            getItemInfoRenderStore(null, item_name, class_id, specialization_id, true)
           } else {
-            alert("something wrong.. please try again")
+            getItemInfoRenderStore(null, item_name, class_id, specialization_id, true)
           }
           
-          $('#input-item-id').val('')
           $('#input-item-name').val('')
+        })
+
+        // add item from simc
+        $('#add-simc-button').click(function() {
+          var class_id = GetURLParameter('c_id')
+          var specialization_id = GetURLParameter('sp_id')
+          var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+          var stored_items = JSON.parse(sessionStorage.getItem(storage_key))
+          var simc_items = JSON.parse(sessionStorage.getItem("azblr-items-simc"))
+
+          if (simc_items != null && simc_items.length > 0) {
+            var count = 0
+            for (var i=0;i<simc_items.length;i++) {
+              var item = simc_items[i]
+              if (stored_items == null || stored_items.filter(i =>  i['id'] == item['id']).length == 0) {
+                renderUserItem(item)
+                var storage_key = "azblr-items-"+class_id+"-"+specialization_id
+                pushSessionStorageItem(storage_key, item)
+                count = count+1
+              }
+            }
+            if (count > 0) {
+              var tk = sessionStorage.getItem("azblr-tk")
+              if (tk != null) {
+                saveUserItems(tk, class_id, specialization_id)
+              }
+              $('#textarea-simc').trigger('input')
+            }
+          }
         })
 
         // blend

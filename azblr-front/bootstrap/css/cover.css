@@ -18,6 +18,19 @@ a:hover {
   background-color: #fff;
   border: .05rem solid #fff;
 }
+.alert-text {
+  color: red;
+  text-shadow: none;
+}
+.ok-text {
+  color: olivedrab;
+  text-shadow: none;
+}
+.strike-text {
+  color: gray;
+  text-shadow: none;
+  text-decoration: line-through;
+}
 
 
 /*
